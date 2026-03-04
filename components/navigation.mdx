@@ -347,6 +347,113 @@ Extend the footer by editing `Footer.astro`:
 2. Minimize reflows by toggling classes instead of inline styles
 3. Use CSS transitions for smooth animations
 
+## Common Navigation Components
+
+These utility components enhance navigation and user interaction.
+
+### BackLink
+
+A back navigation link with an arrow icon, useful for detail pages.
+
+#### Props
+
+<ParamField path="href" type="string" required>
+  The URL to navigate back to (e.g., `/projects`, `/blog`).
+</ParamField>
+
+<ParamField path="label" type="string" required>
+  The label text for the back link (e.g., "Projects", "Blog").
+</ParamField>
+
+#### Usage
+
+```astro src/pages/project/[id].astro
+---
+import BackLink from "../../components/common/BackLink.astro";
+---
+
+<BackLink href="/projects" label="Projects" />
+```
+
+#### Output
+
+Renders: **← Back to Projects** (with hover effect changing color to red-700)
+
+### ShareButtons
+
+Social media share buttons for blog posts or project pages.
+
+#### Props
+
+<ParamField path="url" type="string" required>
+  The full URL to share (e.g., `https://aviv.sh/blog/post-slug`).
+</ParamField>
+
+<ParamField path="title" type="string" required>
+  The title of the content being shared.
+</ParamField>
+
+<ParamField path="description" type="string" required>
+  A brief description of the content.
+</ParamField>
+
+#### Usage
+
+```astro src/pages/blog/[slug].astro
+---
+import ShareButtons from "../../components/common/ShareButtons.astro";
+
+const { title, description } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+---
+
+<ShareButtons 
+  url={pageUrl.toString()} 
+  title={title} 
+  description={description} 
+/>
+```
+
+#### Supported Platforms
+
+- X (Twitter)
+- LinkedIn
+- Facebook
+- Reddit
+- Email
+
+### SocialLinks
+
+Displays a horizontal list of social media icons with links.
+
+#### Props
+
+<ParamField path="links" type="SocialLink[]" required>
+  Array of social link objects with `href`, `icon`, and `label` properties.
+</ParamField>
+
+#### Usage
+
+```astro src/components/navigation/Footer.astro
+---
+import SocialLinks from "../common/SocialLinks.astro";
+import { socialLinks } from "../../data";
+---
+
+<SocialLinks links={socialLinks} />
+```
+
+#### SocialLink Type
+
+```typescript
+interface SocialLink {
+  href: string;      // URL to social profile
+  icon: string;      // Iconify icon name
+  label: string;     // Accessible label
+  rel?: string;      // Optional rel attribute
+}
+```
+
 ## Related Components
 
 <CardGroup cols={2}>
