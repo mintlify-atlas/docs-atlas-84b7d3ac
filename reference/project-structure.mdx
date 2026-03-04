@@ -1,0 +1,290 @@
+---
+title: "Project Structure"
+description: "Complete directory structure and file organization for Aviv Keller's portfolio website built with Astro and TailwindCSS"
+---
+
+## Overview
+
+This portfolio website is built with Astro 5.13.4 and TailwindCSS 4.1.12, following a clean and organized structure that separates concerns into logical directories.
+
+## Root Directory
+
+```
+aviv.sh/
+├── .github/          # GitHub workflows and configuration
+├── .vscode/          # VS Code workspace settings
+├── public/           # Static assets served directly
+├── src/              # Source code and components
+├── astro.config.mjs  # Astro configuration
+├── eslint.config.mjs # ESLint configuration
+├── package.json      # Project dependencies and scripts
+├── tailwind.config.mjs # TailwindCSS configuration
+└── tsconfig.json     # TypeScript configuration
+```
+
+## Source Directory (`src/`)
+
+The main application code is organized into the following directories:
+
+<Accordion title="assets/">
+  Contains static assets like images and other media files used throughout the site.
+
+  **Location:** `src/assets/`
+
+  ### Subdirectories
+
+  <ResponseField name="images/" type="directory">
+    Image assets for projects, logos, and branding.
+
+    **Files:**
+    - `avatar.svg` - User avatar image
+    - `gora-logo.png` - Gora project logo
+    - `keyframed-logo.png` - Keyframed project logo
+    - `nodejs-logo.svg` - Node.js project logo
+    - `termview-logo.png` - Termview project logo
+  </ResponseField>
+</Accordion>
+
+<Accordion title="components/">
+  Reusable Astro components organized by category.
+
+  **Location:** `src/components/`
+
+  ### Subdirectories
+
+  <ResponseField name="cards/" type="directory">
+    Card components for displaying content items.
+
+    **Files:**
+    - `AchievementCard.astro` - Displays individual achievements
+    - `BlogCard.astro` - Displays blog post previews
+    - `ProjectCard.astro` - Displays project information
+    - `WorkExperienceCard.astro` - Displays work experience entries
+  </ResponseField>
+
+  <ResponseField name="common/" type="directory">
+    Shared components used across multiple pages.
+
+    **Files:**
+    - `BackLink.astro` - Navigation back link component
+    - `ShareButtons.astro` - Social media share buttons
+    - `SocialLinks.astro` - Social media profile links
+  </ResponseField>
+
+  <ResponseField name="navigation/" type="directory">
+    Site navigation components.
+
+    **Files:**
+    - `Footer.astro` - Site footer with links and information
+    - `Header.astro` - Site header with navigation menu
+  </ResponseField>
+
+  <ResponseField name="sections/" type="directory">
+    Page section components.
+
+    **Files:**
+    - `Hero.astro` - Hero section for landing page
+  </ResponseField>
+
+  <ResponseField name="ui/" type="directory">
+    Low-level UI building blocks and design system components.
+
+    **Files:**
+    - `Badge.astro` - Badge component for tags and labels
+    - `Button.astro` - Button component
+    - `Card.astro` - Generic card container
+    - `Icon.astro` - Icon wrapper component
+    - `Section.astro` - Page section wrapper
+    - `SectionHeader.astro` - Section heading component
+    - `StatCard.astro` - Statistics display card
+    - `Timeline.astro` - Timeline visualization component
+  </ResponseField>
+</Accordion>
+
+<Accordion title="data/">
+  TypeScript files containing structured data for the portfolio content.
+
+  **Location:** `src/data/`
+
+  <ResponseField name="index.ts" type="file">
+    Central data export file containing:
+    - `socialLinks` - Social media profile links
+    - `navigation` - Site navigation menu items
+    - `siteConfig` - Site metadata and configuration
+    - Re-exports from other data files
+  </ResponseField>
+
+  <ResponseField name="projects.ts" type="file">
+    Array of project data conforming to the `Project` interface.
+  </ResponseField>
+
+  <ResponseField name="achievements.ts" type="file">
+    Array of achievement data conforming to the `Achievement` interface.
+  </ResponseField>
+
+  <ResponseField name="experience.ts" type="file">
+    Array of work experience data conforming to the `WorkExperience` interface.
+  </ResponseField>
+</Accordion>
+
+<Accordion title="layouts/">
+  Astro layout components that define page structure.
+
+  **Location:** `src/layouts/`
+
+  <ResponseField name="BaseLayout.astro" type="file">
+    Base layout with HTML structure, meta tags, and global styles.
+  </ResponseField>
+
+  <ResponseField name="MainLayout.astro" type="file">
+    Main layout extending BaseLayout with header and footer.
+  </ResponseField>
+
+  <ResponseField name="StaticLayout.astro" type="file">
+    Layout for static content pages.
+  </ResponseField>
+</Accordion>
+
+<Accordion title="pages/">
+  Astro page components that map to routes.
+
+  **Location:** `src/pages/`
+
+  <ResponseField name="index.astro" type="file">
+    Homepage with hero section and overview.
+
+    **Route:** `/`
+  </ResponseField>
+
+  <ResponseField name="projects.astro" type="file">
+    Projects showcase page.
+
+    **Route:** `/projects`
+  </ResponseField>
+
+  <ResponseField name="experience.astro" type="file">
+    Work experience timeline page.
+
+    **Route:** `/experience`
+  </ResponseField>
+
+  <ResponseField name="achievements.astro" type="file">
+    Achievements and recognitions page.
+
+    **Route:** `/achievements`
+  </ResponseField>
+
+  <ResponseField name="blog.astro" type="file">
+    Blog listing page.
+
+    **Route:** `/blog`
+  </ResponseField>
+
+  <ResponseField name="404.astro" type="file">
+    Custom 404 error page.
+
+    **Route:** `/404`
+  </ResponseField>
+</Accordion>
+
+<Accordion title="styles/">
+  Global CSS styles and Tailwind configuration.
+
+  **Location:** `src/styles/`
+
+  <ResponseField name="global.css" type="file">
+    Global CSS styles and Tailwind directives.
+  </ResponseField>
+</Accordion>
+
+<Accordion title="types/">
+  TypeScript type definitions and interfaces.
+
+  **Location:** `src/types/`
+
+  <ResponseField name="index.ts" type="file">
+    All TypeScript interfaces for the application. See the [Types Reference](/reference/types) for detailed documentation.
+  </ResponseField>
+</Accordion>
+
+<Accordion title="utils/">
+  Utility functions and helper modules.
+
+  **Location:** `src/utils/`
+
+  <ResponseField name="index.ts" type="file">
+    Utility functions for social sharing and other helpers. See the [Utilities Reference](/reference/utilities) for detailed documentation.
+  </ResponseField>
+</Accordion>
+
+## Public Directory (`public/`)
+
+Static assets served directly without processing:
+
+```
+public/
+├── assets/
+│   └── documents/
+│       ├── nasa_rec.pdf     # NASA recommendation letter
+│       └── verizon_rec.pdf  # Verizon recommendation letter
+├── favicon.ico              # Site favicon
+└── robots.txt              # Search engine crawler instructions
+```
+
+## Configuration Files
+
+<ResponseField name="astro.config.mjs" type="file">
+  Astro framework configuration including integrations and build settings.
+
+  **Key features:**
+  - Sitemap generation
+  - SEO optimization
+  - Icon integration
+</ResponseField>
+
+<ResponseField name="tailwind.config.mjs" type="file">
+  TailwindCSS configuration for styling.
+</ResponseField>
+
+<ResponseField name="tsconfig.json" type="file">
+  TypeScript compiler configuration.
+</ResponseField>
+
+<ResponseField name="eslint.config.mjs" type="file">
+  ESLint configuration for code quality.
+</ResponseField>
+
+<ResponseField name="package.json" type="file">
+  Project dependencies and npm scripts.
+
+  **Available Scripts:**
+  - `npm run dev` - Start development server
+  - `npm run build` - Build for production
+  - `npm run preview` - Preview production build
+  - `npm run lint` - Run ESLint
+  - `npm run format:write` - Format code with Prettier
+</ResponseField>
+
+## File Naming Conventions
+
+- **Components:** PascalCase (e.g., `ProjectCard.astro`)
+- **Data files:** camelCase (e.g., `achievements.ts`)
+- **Pages:** kebab-case or lowercase (e.g., `index.astro`, `404.astro`)
+- **Types:** camelCase for files, PascalCase for interfaces
+- **Utilities:** camelCase
+
+## Import Patterns
+
+```typescript
+// Type imports
+import type { Project, Achievement } from "../types";
+
+// Data imports
+import { projects, achievements } from "../data";
+
+// Component imports (in Astro files)
+import ProjectCard from "../components/cards/ProjectCard.astro";
+
+// Asset imports
+import avatar from "../assets/images/avatar.svg";
+```

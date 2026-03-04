@@ -1,0 +1,545 @@
+---
+title: "Layouts"
+description: "Learn how to work with and customize the three layout components in the portfolio"
+---
+
+## Overview
+
+The portfolio uses three layout components that build on each other:
+
+1. **BaseLayout** - Foundation with HTML structure, SEO, and global styles
+2. **MainLayout** - Adds header and footer for standard pages
+3. **StaticLayout** - Adds header and footer with container for content pages
+
+## Layout Hierarchy
+
+```
+BaseLayout (Foundation)
+├── MainLayout (Dynamic pages - home, projects, etc.)
+└── StaticLayout (Content pages - blog posts, etc.)
+```
+
+## BaseLayout
+
+The foundation layout that all pages build upon.
+
+### Location
+
+`src/layouts/BaseLayout.astro`
+
+### Features
+
+- HTML document structure
+- SEO meta tags via `astro-seo`
+- Global CSS import
+- Viewport configuration
+- Twitter card metadata
+- Sitemap reference
+
+### Source Code
+
+```astro src/layouts/BaseLayout.astro
+---
+import { SEO } from "astro-seo";
+import { siteConfig } from "../data";
+import "../styles/global.css";
+
+const { title, description = siteConfig.description } = Astro.props;
+const pageTitle = title ? `${siteConfig.name} | ${title}` : siteConfig.title;
+---
+
+<html lang="en" class="scroll-smooth">
+  <head>
+    <SEO
+      title={pageTitle}
+      description={description}
+      charset="utf-8"
+      twitter={{
+        card: "summary",
+        site: siteConfig.author.twitter,
+        creator: siteConfig.author.twitter,
+        title: pageTitle,
+        description,
+      }}
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body class="flex min-h-screen flex-col bg-gray-50 font-sans text-gray-800">
+    <slot />
+  </body>
+</html>
+```
+
+### Props
+
+<ParamField path="title" type="string" required>
+  Page title shown in browser tab and SEO
+</ParamField>
+
+<ParamField path="description" type="string">
+  Page description for SEO (defaults to `siteConfig.description`)
+</ParamField>
+
+### Usage
+
+```astro
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Custom Page" description="Custom description">
+  <div>Your custom content</div>
+</BaseLayout>
+```
+
+### Customization
+
+<Tabs>
+
+<Tab title="Add Favicon">
+
+```astro src/layouts/BaseLayout.astro
+<head>
+  <SEO ... />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+</head>
+```
+
+</Tab>
+
+<Tab title="Add Google Analytics">
+
+```astro src/layouts/BaseLayout.astro
+<head>
+  <SEO ... />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script>
+</head>
+```
+
+</Tab>
+
+<Tab title="Add Open Graph">
+
+```astro src/layouts/BaseLayout.astro
+<SEO
+  title={pageTitle}
+  description={description}
+  openGraph={{
+    basic: {
+      title: pageTitle,
+      type: "website",
+      image: "https://aviv.sh/og-image.png",
+    },
+  }}
+  twitter={{...}}
+/>
+```
+
+</Tab>
+
+</Tabs>
+
+<Tip>
+  BaseLayout sets `scroll-smooth` on the HTML element for smooth scrolling to anchor links.
+</Tip>
+
+## MainLayout
+
+Builds on BaseLayout to add navigation structure for dynamic pages.
+
+### Location
+
+`src/layouts/MainLayout.astro`
+
+### Features
+
+- Header with navigation
+- Footer with social links
+- Flexible main content area
+- Used for homepage and landing pages
+
+### Source Code
+
+```astro src/layouts/MainLayout.astro
+---
+import BaseLayout from "./BaseLayout.astro";
+import Footer from "../components/navigation/Footer.astro";
+import Header from "../components/navigation/Header.astro";
+import { navigation, socialLinks, siteConfig } from "../data";
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <Header navigation={navigation} siteName={siteConfig.name} />
+  <main class="flex-grow">
+    <slot />
+  </main>
+  <Footer siteName={siteConfig.name} socialLinks={socialLinks} />
+</BaseLayout>
+```
+
+### Structure
+
+```
+┌─────────────────────────┐
+│  Header (transparent)   │ ← Overlays content
+├─────────────────────────┤
+│                         │
+│    Main Content Area    │ ← Full width sections
+│      (flex-grow)        │
+│                         │
+├─────────────────────────┤
+│        Footer           │
+└─────────────────────────┘
+```
+
+### Props
+
+Inherits props from BaseLayout:
+
+<ParamField path="title" type="string" required>
+  Page title
+</ParamField>
+
+<ParamField path="description" type="string">
+  Page description
+</ParamField>
+
+### Usage
+
+```astro src/pages/index.astro
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Hero from "../components/sections/Hero.astro";
+import Section from "../components/ui/Section.astro";
+---
+
+<MainLayout>
+  <Hero title="Welcome" subtitle="Portfolio" />
+  
+  <Section background="bg-white">
+    <h2>Projects</h2>
+  </Section>
+  
+  <Section background="bg-red-50">
+    <h2>Experience</h2>
+  </Section>
+</MainLayout>
+```
+
+### Header Behavior
+
+The header in MainLayout has dynamic scroll behavior:
+
+```astro
+<!-- Transparent by default -->
+<Header navigation={navigation} siteName={siteConfig.name} />
+
+<!-- On scroll > 50px: -->
+<!-- - bg-white and shadow-md added -->
+<!-- - Logo changes from white to red-600 -->
+<!-- - Links change from white to gray-600 -->
+```
+
+This creates an overlay effect perfect for hero sections.
+
+<Warning>
+  MainLayout's header is transparent by default. Make sure your hero section has a background color or the header won't be visible.
+</Warning>
+
+## StaticLayout
+
+Builds on BaseLayout for content pages that need a container.
+
+### Location
+
+`src/layouts/StaticLayout.astro`
+
+### Features
+
+- Static header (always visible with background)
+- Centered container with padding
+- Footer with social links
+- Perfect for blog posts and text content
+
+### Source Code
+
+```astro src/layouts/StaticLayout.astro
+---
+import BaseLayout from "./BaseLayout.astro";
+import Footer from "../components/navigation/Footer.astro";
+import Header from "../components/navigation/Header.astro";
+import { navigation, socialLinks, siteConfig } from "../data";
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <Header navigation={navigation} siteName={siteConfig.name} isStatic={true} />
+  <main class="container mx-auto flex-grow px-4 py-8">
+    <slot />
+  </main>
+  <Footer siteName={siteConfig.name} socialLinks={socialLinks} />
+</BaseLayout>
+```
+
+### Structure
+
+```
+┌─────────────────────────┐
+│  Header (static bg)     │ ← Always white with shadow
+├─────────────────────────┤
+│ ┌─────────────────────┐ │
+│ │   Container         │ │ ← Centered, max-width
+│ │   Content Area      │ │
+│ │   (px-4 py-8)       │ │
+│ └─────────────────────┘ │
+├─────────────────────────┤
+│        Footer           │
+└─────────────────────────┘
+```
+
+### Props
+
+<ParamField path="title" type="string" required>
+  Page title
+</ParamField>
+
+<ParamField path="description" type="string">
+  Page description
+</ParamField>
+
+### Usage
+
+```astro src/pages/blog/post-1.astro
+---
+import StaticLayout from "../../layouts/StaticLayout.astro";
+---
+
+<StaticLayout title="Blog Post Title" description="Post description">
+  <article class="prose prose-lg max-w-none">
+    <h1>Blog Post Title</h1>
+    <p>Content goes here...</p>
+  </article>
+</StaticLayout>
+```
+
+### Header Behavior
+
+The header in StaticLayout is always visible:
+
+```astro
+<Header navigation={navigation} siteName={siteConfig.name} isStatic={true} />
+
+<!-- Always has: -->
+<!-- - bg-white background -->
+<!-- - shadow-md shadow -->
+<!-- - Red logo text -->
+<!-- - Gray navigation links -->
+<!-- - Extra spacing div at bottom (h-16) -->
+```
+
+## Choosing the Right Layout
+
+<CardGroup cols={2}>
+
+<Card title="Use MainLayout for">
+  - Homepage
+  - Landing pages
+  - Pages with hero sections
+  - Pages with full-width sections
+  - Dynamic content pages
+</Card>
+
+<Card title="Use StaticLayout for">
+  - Blog posts
+  - Documentation pages
+  - Text-heavy content
+  - Pages needing reading width
+  - Content pages without heroes
+</Card>
+
+</CardGroup>
+
+## Layout Comparison
+
+| Feature | BaseLayout | MainLayout | StaticLayout |
+|---------|-----------|------------|-------------|
+| SEO | ✓ | ✓ | ✓ |
+| Header | ✗ | ✓ (dynamic) | ✓ (static) |
+| Footer | ✗ | ✓ | ✓ |
+| Container | ✗ | ✗ | ✓ |
+| Full-width | ✓ | ✓ | ✗ |
+| Best for | Custom | Landing | Content |
+
+## Common Customizations
+
+### Add Breadcrumbs
+
+```astro src/layouts/StaticLayout.astro
+<main class="container mx-auto flex-grow px-4 py-8">
+  <nav class="mb-8 text-sm">
+    <a href="/" class="text-red-600 hover:underline">Home</a>
+    <span class="mx-2 text-gray-400">/</span>
+    <span class="text-gray-600">{title}</span>
+  </nav>
+  <slot />
+</main>
+```
+
+### Add Table of Contents
+
+```astro src/layouts/StaticLayout.astro
+<main class="container mx-auto flex-grow px-4 py-8">
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+    <!-- Table of Contents -->
+    <aside class="lg:col-span-3">
+      <div class="sticky top-24">
+        <h3 class="mb-4 font-bold">On This Page</h3>
+        <nav class="space-y-2 text-sm">
+          <!-- TOC links -->
+        </nav>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <article class="lg:col-span-9">
+      <slot />
+    </article>
+  </div>
+</main>
+```
+
+### Add Max Width to MainLayout
+
+```astro src/layouts/MainLayout.astro
+<main class="flex-grow">
+  <div class="mx-auto max-w-7xl">
+    <slot />
+  </div>
+</main>
+```
+
+### Change Container Width
+
+```astro src/layouts/StaticLayout.astro
+<!-- Default -->
+<main class="container mx-auto flex-grow px-4 py-8">
+
+<!-- Narrower (better for reading) -->
+<main class="mx-auto max-w-3xl flex-grow px-4 py-8">
+
+<!-- Wider -->
+<main class="mx-auto max-w-7xl flex-grow px-4 py-8">
+```
+
+## Creating a Custom Layout
+
+You can create specialized layouts by extending BaseLayout:
+
+<Steps>
+
+<Step title="Create layout file">
+
+```astro src/layouts/CustomLayout.astro
+---
+import BaseLayout from "./BaseLayout.astro";
+import Header from "../components/navigation/Header.astro";
+import { navigation, siteConfig } from "../data";
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <Header navigation={navigation} siteName={siteConfig.name} isStatic={true} />
+  
+  <main class="flex-grow">
+    <!-- Custom structure -->
+    <div class="grid grid-cols-12 gap-8">
+      <aside class="col-span-3">
+        <slot name="sidebar" />
+      </aside>
+      <div class="col-span-9">
+        <slot />
+      </div>
+    </div>
+  </main>
+  
+  <!-- Optional footer -->
+</BaseLayout>
+```
+
+</Step>
+
+<Step title="Use custom layout">
+
+```astro src/pages/custom-page.astro
+---
+import CustomLayout from "../layouts/CustomLayout.astro";
+---
+
+<CustomLayout title="Custom Page">
+  <div slot="sidebar">
+    <!-- Sidebar content -->
+  </div>
+  
+  <div>
+    <!-- Main content -->
+  </div>
+</CustomLayout>
+```
+
+</Step>
+
+</Steps>
+
+## Layout Best Practices
+
+<Tip>
+  - Always extend BaseLayout for consistent SEO and styles
+  - Use MainLayout for marketing pages with heroes
+  - Use StaticLayout for readable content pages
+  - Keep layout logic in layout files, not pages
+  - Use slots for flexibility
+  - Pass navigation and config data from layouts, not pages
+</Tip>
+
+## Troubleshooting
+
+### Header Not Showing
+
+Check that you're importing navigation data:
+
+```astro
+import { navigation, socialLinks, siteConfig } from "../data";
+```
+
+### Content Not Centered
+
+StaticLayout includes a container, MainLayout doesn't. For MainLayout, add containers to your sections:
+
+```astro
+<Section background="bg-white">
+  <div class="container mx-auto px-4">
+    <!-- Content -->
+  </div>
+</Section>
+```
+
+### Header Overlapping Content
+
+In MainLayout, the header is fixed and overlays content. In StaticLayout, a spacer div (`<div class="h-16" />`) is added to prevent overlap.
+
+## Resources
+
+- [Astro Layouts Documentation](https://docs.astro.build/en/core-concepts/layouts/)
+- [astro-seo Package](https://github.com/jonasmerlin/astro-seo)

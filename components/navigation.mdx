@@ -1,0 +1,360 @@
+---
+title: Navigation Components
+description: Header and footer components for site navigation and branding
+---
+
+## Overview
+
+Navigation components provide consistent site-wide navigation and branding. They're located in `src/components/navigation/`.
+
+## Header
+
+A responsive navigation header with mobile menu support and scroll-based styling.
+
+### Props
+
+<ParamField path="navigation" type="NavigationItem[]" required>
+  Array of navigation items:
+  
+  <ParamField path="navigation[].title" type="string" required>
+    Link text
+  </ParamField>
+  
+  <ParamField path="navigation[].href" type="string" required>
+    Link URL
+  </ParamField>
+  
+  <ParamField path="navigation[].target" type="string" default="_self">
+    Link target (e.g., `"_blank"` for external links)
+  </ParamField>
+</ParamField>
+
+<ParamField path="siteName" type="string" required>
+  Site name displayed in logo
+</ParamField>
+
+<ParamField path="isStatic" type="boolean" default={false}>
+  If `true`, header has static white background. If `false`, header is transparent on top and becomes white on scroll.
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro Dynamic Header (Home Page)
+---
+import Header from "../components/navigation/Header.astro";
+
+const navigation = [
+  { title: "Projects", href: "/projects" },
+  { title: "Experience", href: "/experience" },
+  { title: "Blog", href: "/blog" },
+  { title: "GitHub", href: "https://github.com/username", target: "_blank" },
+];
+---
+
+<Header
+  navigation={navigation}
+  siteName="Aviv Keller"
+  isStatic={false}
+/>
+```
+
+```astro Static Header (Other Pages)
+<Header
+  navigation={navigation}
+  siteName="Aviv Keller"
+  isStatic={true}
+/>
+```
+</CodeGroup>
+
+### Features
+
+#### Dynamic Mode (`isStatic={false}`)
+
+Used on the home page with hero section:
+
+- **Above scroll threshold**: Transparent background, white text
+- **Below scroll threshold (50px)**: White background, colored text, shadow
+- Smooth color transitions on scroll
+
+#### Static Mode (`isStatic={true}`)
+
+Used on other pages:
+
+- Always white background
+- Always colored text
+- Always has shadow
+- Adds spacing below header (`h-16` spacer)
+
+#### Mobile Menu
+
+- Hamburger icon on small screens
+- Full-screen overlay menu
+- Smooth slide animation
+- Accessible with `aria-expanded`
+
+#### Responsive Design
+
+- Desktop: Horizontal menu (`md:flex`)
+- Mobile: Hamburger menu icon
+- Logo always visible
+- Smooth transitions between states
+
+### Behavior
+
+The header includes client-side JavaScript for:
+
+1. **Scroll detection**: Changes styling at 50px scroll
+2. **Mobile menu toggle**: Opens/closes overlay
+3. **Dynamic styling**: Updates colors and shadows
+
+### Styling Customization
+
+The header styling is controlled by JavaScript that toggles Tailwind classes:
+
+```javascript
+// Dynamic mode - changes on scroll
+navbar?.classList.toggle("bg-white", isScrolled);
+navbar?.classList.toggle("shadow-md", isScrolled);
+logo?.classList.toggle("text-red-600", isScrolled);
+logo?.classList.toggle("text-white", !isScrolled);
+```
+
+### Example Navigation Data
+
+```typescript
+const navigation = [
+  { title: "Home", href: "/" },
+  { title: "Projects", href: "/projects" },
+  { title: "Experience", href: "/experience" },
+  { title: "Blog", href: "/blog" },
+  { title: "Achievements", href: "/achievements" },
+  {
+    title: "GitHub",
+    href: "https://github.com/avivkeller",
+    target: "_blank"
+  },
+];
+```
+
+## Footer
+
+A simple footer with copyright and social links.
+
+### Props
+
+<ParamField path="siteName" type="string" required>
+  Site name for copyright notice
+</ParamField>
+
+<ParamField path="socialLinks" type="SocialLink[]" required>
+  Array of social media links:
+  
+  <ParamField path="socialLinks[].href" type="string" required>
+    Social media profile URL
+  </ParamField>
+  
+  <ParamField path="socialLinks[].icon" type="string" required>
+    Iconify icon name (e.g., `"mdi:github"`)
+  </ParamField>
+  
+  <ParamField path="socialLinks[].label" type="string" required>
+    Accessible label for the link
+  </ParamField>
+  
+  <ParamField path="socialLinks[].rel" type="string">
+    Link relationship (optional, e.g., `"me"`)
+  </ParamField>
+</ParamField>
+
+### Usage
+
+```astro
+---
+import Footer from "../components/navigation/Footer.astro";
+
+const socialLinks = [
+  {
+    href: "https://github.com/avivkeller",
+    icon: "mdi:github",
+    label: "GitHub",
+    rel: "me"
+  },
+  {
+    href: "https://twitter.com/username",
+    icon: "mdi:twitter",
+    label: "Twitter"
+  },
+  {
+    href: "https://linkedin.com/in/username",
+    icon: "mdi:linkedin",
+    label: "LinkedIn"
+  },
+];
+---
+
+<Footer siteName="Aviv Keller" socialLinks={socialLinks} />
+```
+
+### Features
+
+- Automatic current year in copyright
+- Responsive layout (stacked on mobile, horizontal on desktop)
+- Integrated `SocialLinks` component
+- Light gray background (`bg-gray-100`)
+- Top margin separation from content
+
+### Social Links Component
+
+The footer uses the `SocialLinks` component internally, which renders:
+
+- Icon buttons for each social link
+- Hover effects
+- Accessible labels
+- External link handling
+
+## Layout Integration
+
+### Main Layout (Home Page)
+
+```astro
+---
+import Header from "../components/navigation/Header.astro";
+import Footer from "../components/navigation/Footer.astro";
+import { navigation, socialLinks, siteConfig } from "../data";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Head content -->
+  </head>
+  <body>
+    <Header
+      navigation={navigation}
+      siteName={siteConfig.name}
+      isStatic={false}
+    />
+    
+    <main>
+      <slot />
+    </main>
+    
+    <Footer
+      siteName={siteConfig.name}
+      socialLinks={socialLinks}
+    />
+  </body>
+</html>
+```
+
+### Static Layout (Other Pages)
+
+```astro
+<Header
+  navigation={navigation}
+  siteName={siteConfig.name}
+  isStatic={true}
+/>
+
+<main class="min-h-screen">
+  <Section background="bg-white" padding="py-12">
+    <slot />
+  </Section>
+</main>
+
+<Footer
+  siteName={siteConfig.name}
+  socialLinks={socialLinks}
+/>
+```
+
+## Accessibility
+
+### Header
+
+- **Mobile menu button**: Has `aria-expanded` attribute
+- **Mobile menu button**: Has `aria-label="Toggle menu"`
+- **External links**: Automatically include `target="_blank"`
+- **Keyboard navigation**: All links are keyboard accessible
+
+### Footer
+
+- **Social links**: Each has descriptive `label` for screen readers
+- **External links**: Use `rel` attribute for security
+- **Semantic HTML**: Uses `<footer>` element
+
+## Customization
+
+### Changing Colors
+
+Edit the header scroll behavior in `Header.astro:86-99`:
+
+```javascript
+window.addEventListener("scroll", () => {
+  const isScrolled = window.scrollY > 50;
+  
+  // Customize these color classes
+  logo?.classList.toggle("text-red-600", isScrolled);
+  logo?.classList.toggle("text-white", !isScrolled);
+});
+```
+
+### Adding Footer Links
+
+Extend the footer by editing `Footer.astro`:
+
+```astro
+<footer class="mt-12 bg-gray-100 py-8">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col items-center justify-between md:flex-row">
+      <div class="mb-4 text-gray-600 md:mb-0">
+        © {currentYear} {siteName}. All rights reserved.
+      </div>
+      
+      <!-- Add custom links here -->
+      <div class="mb-4 flex gap-4">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
+      
+      <SocialLinks links={socialLinks} />
+    </div>
+  </div>
+</footer>
+```
+
+## Best Practices
+
+### Navigation Structure
+
+1. Keep navigation items concise (4-6 items)
+2. Put most important pages first
+3. Use external link icons for clarity
+4. Group related pages in the future with dropdowns
+
+### Mobile Experience
+
+1. Test mobile menu on real devices
+2. Ensure touch targets are large enough (44x44px minimum)
+3. Provide visual feedback for active page
+4. Consider adding page transitions
+
+### Performance
+
+1. Header JavaScript is inline for instant interactivity
+2. Minimize reflows by toggling classes instead of inline styles
+3. Use CSS transitions for smooth animations
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="UI Elements" icon="square" href="/components/ui-elements">
+    Learn about Icon and other UI components used in navigation
+  </Card>
+  
+  <Card title="Sections" icon="layout" href="/components/sections">
+    See how navigation integrates with page sections
+  </Card>
+</CardGroup>

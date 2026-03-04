@@ -1,0 +1,340 @@
+---
+title: Site Configuration
+description: Learn how to configure site settings, including name, social links, navigation, and author information.
+---
+
+## Overview
+
+The site configuration controls global settings for your portfolio, including site metadata, social media links, navigation items, and author information. All configuration is centralized in `src/data/index.ts`.
+
+## Configuration Interfaces
+
+Site configuration uses several TypeScript interfaces:
+
+```typescript src/types/index.ts
+export interface SocialLink {
+  href: string;
+  icon: string;
+  label: string;
+  rel?: string;
+}
+
+export interface NavigationItem {
+  href: string;
+  title: string;
+  target?: string;
+}
+```
+
+## Site Configuration Object
+
+```typescript src/data/index.ts
+export const siteConfig = {
+  name: "Aviv Keller",
+  title: "Aviv Keller | Developer & Security Enthusiast",
+  description: "Aviv is a software developer and cybersecurity enthusiast.",
+  author: {
+    name: "Aviv Keller",
+    twitter: "@aviv_keller",
+    email: "me@aviv.sh",
+  },
+};
+```
+
+## Configuration Fields
+
+### Site Metadata
+
+<ParamField path="name" type="string" required>
+  Your name or site name. Used in headers and meta tags.
+</ParamField>
+
+<ParamField path="title" type="string" required>
+  The full page title. Appears in browser tabs and search results.
+</ParamField>
+
+<ParamField path="description" type="string" required>
+  A brief description of you or your site. Used for SEO and social media previews.
+</ParamField>
+
+### Author Information
+
+<ParamField path="author.name" type="string" required>
+  Your full name for attribution and meta tags.
+</ParamField>
+
+<ParamField path="author.twitter" type="string">
+  Your Twitter/X handle (include the @ symbol).
+</ParamField>
+
+<ParamField path="author.email" type="string">
+  Your contact email address.
+</ParamField>
+
+## Social Links
+
+Social links appear in your site's footer and header.
+
+### SocialLink Fields
+
+<ParamField path="href" type="string" required>
+  The URL to your social media profile or contact method.
+</ParamField>
+
+<ParamField path="icon" type="string" required>
+  The icon identifier from [Iconify](https://icon-sets.iconify.design/).
+</ParamField>
+
+<ParamField path="label" type="string" required>
+  A human-readable label for the link (e.g., "GitHub", "Email").
+</ParamField>
+
+<ParamField path="rel" type="string">
+  Optional link relationship attribute (e.g., `"me"`, `"noopener"`).
+</ParamField>
+
+### Adding Social Links
+
+```typescript src/data/index.ts
+export const socialLinks: SocialLink[] = [
+  {
+    href: "https://github.com/avivkeller",
+    icon: "simple-icons:github",
+    label: "GitHub",
+  },
+  {
+    href: "https://x.com/aviv_keller",
+    icon: "simple-icons:x",
+    label: "X (Twitter)",
+  },
+  {
+    href: "https://bsky.app/profile/aviv.sh",
+    icon: "simple-icons:bluesky",
+    label: "Bluesky",
+  },
+  {
+    href: "https://www.linkedin.com/in/avivkeller",
+    icon: "simple-icons:linkedin",
+    label: "LinkedIn",
+  },
+  {
+    href: "mailto:me@aviv.sh",
+    icon: "mdi:email",
+    label: "Email",
+  },
+];
+```
+
+## Navigation
+
+Navigation items control the main menu of your site.
+
+### NavigationItem Fields
+
+<ParamField path="href" type="string" required>
+  The URL path (internal) or full URL (external) for the link.
+</ParamField>
+
+<ParamField path="title" type="string" required>
+  The text to display for the navigation item.
+</ParamField>
+
+<ParamField path="target" type="string">
+  Optional target attribute. Use `"_blank"` for external links to open in new tab.
+</ParamField>
+
+### Configuring Navigation
+
+```typescript src/data/index.ts
+export const navigation: NavigationItem[] = [
+  { href: "/projects", title: "Projects" },
+  { href: "/experience", title: "Experience" },
+  { href: "/blog", title: "Blog" },
+  { href: "/achievements", title: "Achievements" },
+  {
+    href: "https://github.com/sponsors/avivkeller",
+    title: "Donate",
+    target: "_blank",
+  },
+];
+```
+
+## Real-World Examples
+
+<Tabs>
+  <Tab title="Social Links">
+    ```typescript
+    export const socialLinks: SocialLink[] = [
+      {
+        href: "https://github.com/avivkeller",
+        icon: "simple-icons:github",
+        label: "GitHub",
+      },
+      {
+        href: "https://hackerone.com/aviv_keller",
+        icon: "simple-icons:hackerone",
+        label: "HackerOne",
+      },
+      {
+        href: "https://github.com/sponsors/avivkeller",
+        icon: "simple-icons:githubsponsors",
+        label: "GitHub Sponsors",
+      },
+      {
+        href: "mailto:me@aviv.sh",
+        icon: "mdi:email",
+        label: "Email",
+      },
+    ];
+    ```
+  </Tab>
+  
+  <Tab title="Navigation">
+    ```typescript
+    export const navigation: NavigationItem[] = [
+      { href: "/projects", title: "Projects" },
+      { href: "/experience", title: "Experience" },
+      { href: "/blog", title: "Blog" },
+      { href: "/achievements", title: "Achievements" },
+      {
+        href: "https://github.com/sponsors/avivkeller",
+        title: "Donate",
+        target: "_blank",
+      },
+    ];
+    ```
+  </Tab>
+  
+  <Tab title="Site Config">
+    ```typescript
+    export const siteConfig = {
+      name: "Aviv Keller",
+      title: "Aviv Keller | Developer & Security Enthusiast",
+      description: "Aviv is a software developer and cybersecurity enthusiast.",
+      author: {
+        name: "Aviv Keller",
+        twitter: "@aviv_keller",
+        email: "me@aviv.sh",
+      },
+    };
+    ```
+  </Tab>
+</Tabs>
+
+## Complete Configuration Example
+
+Here's the full configuration file structure:
+
+```typescript src/data/index.ts
+import type { SocialLink, NavigationItem } from "../types";
+
+// Social media and contact links
+export const socialLinks: SocialLink[] = [
+  {
+    href: "https://github.com/avivkeller",
+    icon: "simple-icons:github",
+    label: "GitHub",
+  },
+  {
+    href: "https://x.com/aviv_keller",
+    icon: "simple-icons:x",
+    label: "X (Twitter)",
+  },
+  {
+    href: "https://bsky.app/profile/aviv.sh",
+    icon: "simple-icons:bluesky",
+    label: "Bluesky",
+  },
+  {
+    href: "https://www.linkedin.com/in/avivkeller",
+    icon: "simple-icons:linkedin",
+    label: "LinkedIn",
+  },
+  {
+    href: "https://hackerone.com/aviv_keller",
+    icon: "simple-icons:hackerone",
+    label: "HackerOne",
+  },
+  {
+    href: "https://github.com/sponsors/avivkeller",
+    icon: "simple-icons:githubsponsors",
+    label: "GitHub Sponsors",
+  },
+  {
+    href: "mailto:me@aviv.sh",
+    icon: "mdi:email",
+    label: "Email",
+  },
+];
+
+// Main navigation menu
+export const navigation: NavigationItem[] = [
+  { href: "/projects", title: "Projects" },
+  { href: "/experience", title: "Experience" },
+  { href: "/blog", title: "Blog" },
+  { href: "/achievements", title: "Achievements" },
+  {
+    href: "https://github.com/sponsors/avivkeller",
+    title: "Donate",
+    target: "_blank",
+  },
+];
+
+// Site metadata and author info
+export const siteConfig = {
+  name: "Aviv Keller",
+  title: "Aviv Keller | Developer & Security Enthusiast",
+  description: "Aviv is a software developer and cybersecurity enthusiast.",
+  author: {
+    name: "Aviv Keller",
+    twitter: "@aviv_keller",
+    email: "me@aviv.sh",
+  },
+};
+
+// Export data collections
+export { projects } from "./projects";
+export { achievements } from "./achievements";
+export { workExperience } from "./experience";
+```
+
+## Common Social Platform Icons
+
+| Platform | Icon | Example |
+|----------|------|----------|
+| GitHub | `simple-icons:github` | `{ icon: "simple-icons:github", label: "GitHub" }` |
+| Twitter/X | `simple-icons:x` | `{ icon: "simple-icons:x", label: "X" }` |
+| LinkedIn | `simple-icons:linkedin` | `{ icon: "simple-icons:linkedin", label: "LinkedIn" }` |
+| Bluesky | `simple-icons:bluesky` | `{ icon: "simple-icons:bluesky", label: "Bluesky" }` |
+| Email | `mdi:email` | `{ icon: "mdi:email", label: "Email" }` |
+| HackerOne | `simple-icons:hackerone` | `{ icon: "simple-icons:hackerone", label: "HackerOne" }` |
+| Sponsors | `simple-icons:githubsponsors` | `{ icon: "simple-icons:githubsponsors", label: "Sponsors" }` |
+
+<Note>
+  Browse thousands of icons at [icon-sets.iconify.design](https://icon-sets.iconify.design/). Most major platforms are available under the `simple-icons:` prefix.
+</Note>
+
+## Best Practices
+
+### Site Metadata
+- Keep the site title under 60 characters for optimal SEO
+- Write a compelling description (under 160 characters)
+- Use your actual name for better personal branding
+
+### Social Links
+- Order links by importance or frequency of use
+- Include only active, current profiles
+- Verify all URLs are correct and publicly accessible
+- Use consistent labeling (e.g., "GitHub" not "github" or "Github")
+
+### Navigation
+- Limit to 5-7 main navigation items
+- Use clear, concise labels
+- Order by importance or user journey
+- Use `target="_blank"` for external links
+- Keep internal links consistent (with or without trailing slashes)
+
+### Author Information
+- Keep email and social handles up to date
+- Use the same name consistently across the site
+- Include Twitter handle for proper social media card attribution

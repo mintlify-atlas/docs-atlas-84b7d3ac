@@ -1,0 +1,200 @@
+---
+title: Component System Overview
+description: Learn about the component architecture, organization, and usage patterns in Aviv Keller's portfolio
+---
+
+## Introduction
+
+This portfolio is built with Astro and follows a modular component architecture. All components are located in `src/components/` and organized by their purpose and functionality.
+
+## Component Architecture
+
+The component system is organized into four main categories:
+
+<CardGroup cols={2}>
+  <Card title="Card Components" icon="id-card" href="/components/cards">
+    Specialized display components for projects, blog posts, work experience, and achievements
+  </Card>
+  
+  <Card title="UI Elements" icon="square" href="/components/ui-elements">
+    Reusable UI primitives like buttons, badges, cards, and icons
+  </Card>
+  
+  <Card title="Navigation" icon="bars" href="/components/navigation">
+    Header and footer components for site navigation
+  </Card>
+  
+  <Card title="Sections" icon="layout" href="/components/sections">
+    Full-page section components like the hero banner
+  </Card>
+</CardGroup>
+
+## Directory Structure
+
+```
+src/components/
+├── cards/              # Specialized card components
+│   ├── ProjectCard.astro
+│   ├── BlogCard.astro
+│   ├── WorkExperienceCard.astro
+│   └── AchievementCard.astro
+├── ui/                 # Base UI components
+│   ├── Button.astro
+│   ├── Badge.astro
+│   ├── Card.astro
+│   ├── Icon.astro
+│   ├── Section.astro
+│   ├── SectionHeader.astro
+│   ├── StatCard.astro
+│   └── Timeline.astro
+├── navigation/         # Navigation components
+│   ├── Header.astro
+│   └── Footer.astro
+├── sections/           # Section components
+│   └── Hero.astro
+└── common/             # Common utility components
+    ├── SocialLinks.astro
+    ├── ShareButtons.astro
+    └── BackLink.astro
+```
+
+## Using Components
+
+All components in this portfolio are Astro components (`.astro` files) that accept props and can contain slots for flexible content.
+
+### Basic Usage
+
+```astro
+---
+import Button from "../components/ui/Button.astro";
+import Icon from "../components/ui/Icon.astro";
+---
+
+<Button href="/projects" size="lg">
+  View Projects
+  <Icon name="mdi:arrow-right" size={20} class="ml-2" />
+</Button>
+```
+
+### With Props
+
+Components accept props that are destructured in the frontmatter:
+
+```astro
+---
+import Hero from "../components/sections/Hero.astro";
+---
+
+<Hero
+  title="Aviv Keller"
+  subtitle="Developer & Security Enthusiast"
+  ctaText="View My Work"
+  ctaHref="#projects"
+/>
+```
+
+### With Slots
+
+Many components support slot content for maximum flexibility:
+
+```astro
+---
+import Section from "../components/ui/Section.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
+---
+
+<Section background="bg-white" id="projects">
+  <SectionHeader
+    title="Featured Projects"
+    subtitle="Innovative solutions and tools"
+  />
+  <!-- Your content here -->
+</Section>
+```
+
+## Design System
+
+### Color Palette
+
+The portfolio uses a consistent color scheme:
+
+- **Primary**: Red (`red-500` to `red-700`) - Used for CTAs and accents
+- **Secondary**: Gray (`gray-100` to `gray-900`) - Used for text and backgrounds
+- **Success**: Emerald - Used for positive states
+- **Warning**: Orange - Used for attention states
+
+### Typography
+
+The site uses system fonts with these base styles:
+
+- **Headings**: Font weight `black` (900) or `bold` (700)
+- **Body**: Font weight `normal` (400) or `medium` (500)
+- **Display**: Large text sizes (4xl-8xl) for hero sections
+
+### Spacing
+
+Components use Tailwind's spacing scale:
+
+- **Sections**: `py-20` (80px vertical padding)
+- **Cards**: `p-6` or `p-8` internal padding
+- **Gaps**: `gap-4`, `gap-6`, `gap-8` for grid layouts
+
+## Type Definitions
+
+Type definitions for data structures are located in `src/types/index.ts`. Key interfaces include:
+
+- `Project` - Project data structure
+- `BlogPost` - Blog post frontmatter
+- `WorkExperience` - Work experience with positions
+- `Achievement` - Achievement with icon and URL
+- `NavigationItem` - Navigation link structure
+- `SocialLink` - Social media link structure
+
+See individual component pages for detailed prop interfaces.
+
+## Best Practices
+
+### Component Composition
+
+Build complex UIs by composing simple components:
+
+```astro
+<Section background="bg-red-50">
+  <SectionHeader title="Projects" subtitle="My work" />
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+    {projects.map((project) => (
+      <ProjectCard project={project} />
+    ))}
+  </div>
+</Section>
+```
+
+### Styling
+
+Use Tailwind utility classes for styling. The `class` prop is supported on all components:
+
+```astro
+<Button class="custom-class" variant="primary" size="lg">
+  Click Me
+</Button>
+```
+
+### Accessibility
+
+Components include proper ARIA attributes and semantic HTML:
+
+- Buttons have `aria-label` when icon-only
+- Navigation has `aria-expanded` for mobile menus
+- Links have `rel="noopener noreferrer"` for external URLs
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Card Components" icon="id-card" href="/components/cards">
+    Learn about ProjectCard, BlogCard, and more
+  </Card>
+  
+  <Card title="UI Elements" icon="square" href="/components/ui-elements">
+    Explore Button, Badge, Icon, and other UI primitives
+  </Card>
+</CardGroup>

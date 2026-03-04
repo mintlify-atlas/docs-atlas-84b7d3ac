@@ -1,0 +1,259 @@
+---
+title: Custom Domain Setup
+description: Configure a custom domain for your Astro portfolio with DNS settings, CNAME file, and SSL/HTTPS
+---
+
+This guide explains how to set up a custom domain for your portfolio website, including DNS configuration and SSL certificate setup.
+
+## Overview
+
+The portfolio is configured to use the custom domain `aviv.sh`. This guide will help you:
+
+- Configure DNS settings with your domain registrar
+- Set up the CNAME file in your repository
+- Enable HTTPS/SSL for secure connections
+- Update Astro configuration for your domain
+
+## CNAME File Configuration
+
+The repository includes a `CNAME` file that tells GitHub Pages which custom domain to use.
+
+<Steps>
+  <Step title="Verify CNAME file exists">
+    The CNAME file should be located at the root of your repository:
+    
+    ```txt CNAME
+    aviv.sh
+    ```
+    
+    <Note>
+    The CNAME file should contain only your domain name, without `https://` or `www.`
+    </Note>
+  </Step>
+
+  <Step title="Update for your domain">
+    If you're using a different domain, update the CNAME file:
+    
+    ```txt CNAME
+    yourdomain.com
+    ```
+    
+    Or for a subdomain:
+    
+    ```txt CNAME
+    portfolio.yourdomain.com
+    ```
+  </Step>
+
+  <Step title="Commit and push changes">
+    ```bash
+    git add CNAME
+    git commit -m "Update custom domain"
+    git push origin gh-pages
+    ```
+  </Step>
+</Steps>
+
+## Astro Configuration
+
+Update the `astro.config.mjs` file to match your custom domain:
+
+```js astro.config.mjs
+import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
+import icon from "astro-icon";
+
+const base = "https://aviv.sh"; // Update this to your domain
+
+export default defineConfig({
+  site: base,
+  integrations: [icon(), sitemap()],
+  
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+<Warning>
+The `site` configuration is crucial for generating correct absolute URLs in your sitemap and meta tags. Always use the full URL including `https://`.
+</Warning>
+
+## DNS Configuration
+
+Configure your DNS settings with your domain registrar to point to GitHub Pages.
+
+### For Apex Domain (e.g., aviv.sh)
+
+<Steps>
+  <Step title="Add A records">
+    Add the following A records to your DNS configuration:
+    
+    | Type | Name | Value |
+    |------|------|-------|
+    | A | @ | 185.199.108.153 |
+    | A | @ | 185.199.109.153 |
+    | A | @ | 185.199.110.153 |
+    | A | @ | 185.199.111.153 |
+  </Step>
+
+  <Step title="Add AAAA records (optional, for IPv6)">
+    For IPv6 support, add these AAAA records:
+    
+    | Type | Name | Value |
+    |------|------|-------|
+    | AAAA | @ | 2606:50c0:8000::153 |
+    | AAAA | @ | 2606:50c0:8001::153 |
+    | AAAA | @ | 2606:50c0:8002::153 |
+    | AAAA | @ | 2606:50c0:8003::153 |
+  </Step>
+</Steps>
+
+### For Subdomain (e.g., www.aviv.sh or portfolio.yourdomain.com)
+
+<Steps>
+  <Step title="Add CNAME record">
+    Add a CNAME record pointing to your GitHub Pages URL:
+    
+    | Type | Name | Value |
+    |------|------|-------|
+    | CNAME | www | yourusername.github.io |
+    
+    Or for a subdomain:
+    
+    | Type | Name | Value |
+    |------|------|-------|
+    | CNAME | portfolio | yourusername.github.io |
+  </Step>
+</Steps>
+
+<Note>
+DNS changes can take up to 24-48 hours to propagate, but typically complete within a few hours.
+</Note>
+
+## GitHub Pages Configuration
+
+<Steps>
+  <Step title="Navigate to repository settings">
+    Go to your repository on GitHub and click **Settings** > **Pages**
+  </Step>
+
+  <Step title="Configure custom domain">
+    1. Under **Custom domain**, enter your domain name (e.g., `aviv.sh`)
+    2. Click **Save**
+    3. GitHub will verify your DNS configuration
+  </Step>
+
+  <Step title="Enable HTTPS">
+    Once DNS is verified:
+    1. Check the box for **Enforce HTTPS**
+    2. Wait for the SSL certificate to be provisioned (usually a few minutes)
+    
+    <Note>
+    GitHub automatically provisions a free SSL certificate from Let's Encrypt for your custom domain.
+    </Note>
+  </Step>
+</Steps>
+
+## Verifying Your Setup
+
+After configuring everything, verify your setup:
+
+<Steps>
+  <Step title="Check DNS propagation">
+    Use a DNS checker tool to verify your records:
+    ```bash
+    nslookup aviv.sh
+    # or
+    dig aviv.sh
+    ```
+  </Step>
+
+  <Step title="Test your domain">
+    Visit your domain in a browser:
+    - `https://yourdomain.com`
+    - Verify it loads correctly
+    - Check that HTTPS is working (look for the padlock icon)
+  </Step>
+
+  <Step title="Verify sitemap">
+    Check that your sitemap uses the correct domain:
+    ```
+    https://yourdomain.com/sitemap-index.xml
+    ```
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+### Domain Not Resolving
+
+**Check DNS records:**
+1. Verify A/AAAA or CNAME records are correctly configured
+2. Use `dig yourdomain.com` or `nslookup yourdomain.com` to verify
+3. Wait for DNS propagation (up to 48 hours)
+
+**Common issues:**
+- Typo in domain name in CNAME file
+- Incorrect DNS records
+- DNS not yet propagated
+
+### SSL Certificate Not Provisioning
+
+<Warning>
+SSL certificates can take up to 24 hours to provision, but usually complete within minutes.
+</Warning>
+
+1. **Verify DNS**: Ensure DNS is correctly configured and propagated
+2. **Check CNAME file**: Verify the CNAME file contains the correct domain
+3. **Remove and re-add**: Try removing the custom domain in GitHub Pages settings and adding it again
+4. **Wait**: Sometimes you just need to wait a bit longer
+
+### Site Shows 404 Error
+
+1. **Verify deployment**: Check that the GitHub Actions workflow completed successfully
+2. **Check CNAME file**: Ensure it's in the repository root and contains only the domain name
+3. **Clear DNS cache**: 
+   ```bash
+   # Windows
+   ipconfig /flushdns
+   
+   # macOS
+   sudo dscacheutil -flushcache
+   
+   # Linux
+   sudo systemd-resolve --flush-caches
+   ```
+4. **Clear browser cache**: Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R)
+
+### WWW vs Non-WWW
+
+To redirect www to non-www (or vice versa):
+
+**Option 1: Both A records and CNAME**
+- Set up A records for apex domain (`@`)
+- Add CNAME record for `www` pointing to apex domain
+- In GitHub Pages settings, use your preferred version
+
+**Option 2: DNS provider redirect**
+- Some DNS providers offer URL forwarding/redirect features
+- Configure `www` to redirect to non-www (or vice versa)
+
+<Note>
+GitHub Pages will automatically redirect between www and non-www versions based on your CNAME configuration.
+</Note>
+
+## Domain Registrars
+
+Here are quick links to DNS settings for popular registrars:
+
+- **Namecheap**: Advanced DNS settings
+- **GoDaddy**: DNS Management
+- **Cloudflare**: DNS settings (with free SSL and CDN)
+- **Google Domains**: DNS settings
+- **Porkbun**: DNS settings
+
+<Note>
+If using Cloudflare, ensure the DNS record is set to "DNS only" (gray cloud) rather than "Proxied" (orange cloud) for GitHub Pages to work correctly, or configure Cloudflare Pages instead.
+</Note>

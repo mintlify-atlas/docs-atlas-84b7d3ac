@@ -1,0 +1,413 @@
+---
+title: Section Components
+description: Full-page section components including the hero banner and layout patterns
+---
+
+## Overview
+
+Section components are large, full-width components that structure page content. They're located in `src/components/sections/`.
+
+## Hero
+
+A full-screen hero section with gradient background, large title, and call-to-action buttons.
+
+### Props
+
+<ParamField path="title" type="string" required>
+  Main heading text (displayed large)
+</ParamField>
+
+<ParamField path="subtitle" type="string" required>
+  Subheading or tagline
+</ParamField>
+
+<ParamField path="ctaText" type="string">
+  Primary call-to-action button text (optional)
+</ParamField>
+
+<ParamField path="ctaHref" type="string">
+  Primary call-to-action button URL (optional)
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro Basic Hero
+<Hero
+  title="Aviv Keller"
+  subtitle="Developer & Security Enthusiast"
+  ctaText="View My Work"
+  ctaHref="#projects"
+/>
+```
+
+```astro Hero with Custom Content
+<Hero
+  title="Welcome"
+  subtitle="Building the future of web development"
+>
+  <div class="mt-8">
+    <!-- Custom content via slot -->
+    <p class="text-red-100">Additional information here</p>
+  </div>
+</Hero>
+```
+
+```astro Minimal Hero
+<Hero
+  title="Aviv Keller"
+  subtitle="Developer & Security Enthusiast"
+/>
+```
+</CodeGroup>
+
+### Features
+
+#### Visual Design
+
+- **Full-screen height**: `min-h-screen` ensures hero fills viewport
+- **Gradient background**: Red gradient (`from-red-500 to-red-700`)
+- **Dark overlay**: Semi-transparent black overlay for contrast
+- **Centered content**: Flexbox centering for perfect alignment
+
+#### Typography
+
+- **Title**: Extra large (6xl on mobile, 8xl on desktop)
+- **Title weight**: Black (900) for maximum impact
+- **Subtitle**: Large (xl on mobile, 3xl on desktop)
+- **Subtitle weight**: Light (300) for contrast
+- **Text color**: White for title, light red for subtitle
+
+#### Call-to-Action Buttons
+
+When `ctaText` and `ctaHref` are provided, the hero displays two buttons:
+
+1. **Primary CTA**: White button with the provided text
+2. **Secondary CTA**: Ghost button with "Learn More" linking to `#about`
+
+```astro
+<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+  <Button href={ctaHref} size="xl" variant="secondary">
+    {ctaText}
+  </Button>
+  <Button
+    href="#about"
+    variant="ghost"
+    class="text-red-100 hover:bg-red-600 hover:text-white"
+  >
+    Learn More
+  </Button>
+</div>
+```
+
+#### Slot Support
+
+The hero includes a default slot for additional content:
+
+```astro
+<Hero title="..." subtitle="...">
+  <!-- Custom content here -->
+  <div class="mt-12">
+    <StatCard icon="mdi:code" value="100+" label="Projects" />
+  </div>
+</Hero>
+```
+
+### Responsive Design
+
+<Tabs>
+  <Tab title="Mobile">
+    - Title: `text-6xl`
+    - Subtitle: `text-xl`
+    - Buttons: Stacked vertically (`flex-col`)
+    - Max width: `max-w-4xl`
+  </Tab>
+  
+  <Tab title="Desktop">
+    - Title: `md:text-8xl`
+    - Subtitle: `md:text-3xl`
+    - Buttons: Horizontal (`sm:flex-row`)
+    - Centered with padding
+  </Tab>
+</Tabs>
+
+### Styling Details
+
+#### Background Layers
+
+```astro
+<!-- Gradient background -->
+<section class="bg-gradient-to-r from-red-500 to-red-700">
+  <!-- Dark overlay for text contrast -->
+  <div class="absolute inset-0 bg-black opacity-50"></div>
+  
+  <!-- Content (positioned above overlay) -->
+  <div class="relative z-10">
+    <!-- Hero content -->
+  </div>
+</section>
+```
+
+#### Text Styling
+
+```astro
+<!-- Title: Large, bold, white -->
+<h1 class="mb-6 text-6xl leading-tight font-black text-white md:text-8xl">
+  {title}
+</h1>
+
+<!-- Subtitle: Medium, light, tinted -->
+<p class="mx-auto mb-8 max-w-2xl text-xl leading-relaxed font-light text-red-100 md:text-3xl">
+  {subtitle}
+</p>
+```
+
+## Common Section Patterns
+
+While the `Hero` is the only dedicated section component, here are common patterns for building other sections:
+
+### Feature Section
+
+```astro
+<Section background="bg-white" id="features">
+  <SectionHeader
+    title="Features"
+    subtitle="Everything you need to succeed"
+  />
+  
+  <div class="grid grid-cols-1 gap-12 md:grid-cols-3">
+    <div class="text-center">
+      <Icon name="mdi:rocket" size={48} class="mx-auto mb-4 text-red-600" />
+      <h3 class="mb-2 text-xl font-bold">Fast</h3>
+      <p class="text-gray-600">Lightning-fast performance</p>
+    </div>
+    
+    <div class="text-center">
+      <Icon name="mdi:shield" size={48} class="mx-auto mb-4 text-red-600" />
+      <h3 class="mb-2 text-xl font-bold">Secure</h3>
+      <p class="text-gray-600">Built with security in mind</p>
+    </div>
+    
+    <div class="text-center">
+      <Icon name="mdi:code" size={48} class="mx-auto mb-4 text-red-600" />
+      <h3 class="mb-2 text-xl font-bold">Modern</h3>
+      <p class="text-gray-600">Latest technologies</p>
+    </div>
+  </div>
+</Section>
+```
+
+### Content Section with Image
+
+```astro
+<Section background="bg-gray-50" id="about">
+  <div class="mx-auto flex max-w-6xl flex-col items-center gap-16 lg:flex-row">
+    <div class="relative">
+      <Image
+        src={avatar}
+        alt="Avatar"
+        class="rounded-full"
+      />
+    </div>
+    
+    <div class="max-w-2xl text-center lg:text-left">
+      <h2 class="mb-6 text-4xl font-black text-gray-900 md:text-5xl">
+        About Me
+      </h2>
+      <p class="mb-8 text-xl leading-relaxed text-gray-600">
+        Your bio text here...
+      </p>
+      <Button href="/contact" size="lg">
+        Get In Touch
+      </Button>
+    </div>
+  </div>
+</Section>
+```
+
+### Grid Section
+
+```astro
+<Section background="bg-white" id="projects">
+  <SectionHeader
+    title="Featured Projects"
+    subtitle="Innovative solutions and tools"
+  />
+  
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    {projects.map((project) => (
+      <ProjectCard project={project} />
+    ))}
+  </div>
+  
+  <div class="mt-12 text-center">
+    <Button href="/projects" size="lg">
+      View All Projects
+      <Icon name="mdi:arrow-right" size={20} class="ml-2" />
+    </Button>
+  </div>
+</Section>
+```
+
+### Call-to-Action Section
+
+```astro
+<Section
+  background="bg-gradient-to-r from-red-500 to-red-700"
+  class="relative overflow-hidden text-center"
+>
+  <div class="absolute inset-0 bg-black opacity-50"></div>
+  <div class="relative z-10">
+    <h2 class="mb-6 text-4xl font-black text-white md:text-5xl">
+      Ready to Start?
+    </h2>
+    <p class="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-red-100">
+      Join thousands of satisfied users today.
+    </p>
+    <Button
+      href="/signup"
+      size="xl"
+      variant="secondary"
+    >
+      Get Started
+    </Button>
+  </div>
+</Section>
+```
+
+### Stats Section
+
+```astro
+<Section background="bg-red-50">
+  <SectionHeader title="By the Numbers" />
+  
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-4">
+    <StatCard
+      icon="mdi:code-braces"
+      value="50+"
+      label="Projects"
+    />
+    <StatCard
+      icon="mdi:github"
+      value="1000+"
+      label="Contributions"
+    />
+    <StatCard
+      icon="mdi:star"
+      value="500+"
+      label="Stars"
+    />
+    <StatCard
+      icon="mdi:account-group"
+      value="10k+"
+      label="Users"
+    />
+  </div>
+</Section>
+```
+
+## Layout Best Practices
+
+### Section Backgrounds
+
+Alternate background colors for visual separation:
+
+```astro
+<Hero /> <!-- Red gradient -->
+<Section background="bg-white" /> <!-- White -->
+<Section background="bg-red-50" /> <!-- Light red -->
+<Section background="bg-white" /> <!-- White -->
+<Section background="bg-gray-50" /> <!-- Light gray -->
+<Section background="bg-red-50" /> <!-- Light red -->
+<Section background="bg-gradient-to-r from-red-500 to-red-700" /> <!-- CTA -->
+```
+
+### Section IDs
+
+Add IDs for anchor navigation:
+
+```astro
+<Hero ctaHref="#projects" />
+
+<Section id="projects">
+  <!-- Content -->
+</Section>
+
+<Section id="about">
+  <!-- Content -->
+</Section>
+```
+
+### Responsive Grids
+
+Use responsive grid patterns:
+
+```astro
+<!-- 1 column mobile, 2 tablet, 3 desktop -->
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+<!-- 1 column mobile, 2 desktop -->
+<div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+
+<!-- 1 column mobile, 4 desktop -->
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+```
+
+### Content Width
+
+Control content width with max-width utilities:
+
+```astro
+<!-- Narrow content -->
+<div class="mx-auto max-w-2xl">
+
+<!-- Medium content -->
+<div class="mx-auto max-w-4xl">
+
+<!-- Wide content -->
+<div class="mx-auto max-w-6xl">
+```
+
+## Accessibility
+
+### Hero Accessibility
+
+- Uses semantic `<section>` element
+- Proper heading hierarchy (h1 for title)
+- Sufficient color contrast (white on red)
+- Keyboard-accessible buttons
+
+### General Section Accessibility
+
+- Use proper heading levels (h2, h3, etc.)
+- Include descriptive section IDs
+- Ensure sufficient color contrast
+- Make all interactive elements keyboard-accessible
+
+## Performance
+
+### Hero Optimization
+
+- Minimal JavaScript (none required)
+- CSS-only animations
+- Optimized gradient rendering
+- No background images (uses CSS gradients)
+
+### General Tips
+
+- Lazy load images below the fold
+- Use responsive images with `<Image>` component
+- Minimize section nesting
+- Keep DOM hierarchy shallow
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="UI Elements" icon="square" href="/components/ui-elements">
+    Learn about Section, SectionHeader, and Button components
+  </Card>
+  
+  <Card title="Navigation" icon="bars" href="/components/navigation">
+    See how Hero works with the Header component
+  </Card>
+</CardGroup>

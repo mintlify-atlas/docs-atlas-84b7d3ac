@@ -1,0 +1,175 @@
+---
+title: Managing Projects
+description: Learn how to add and edit projects in your portfolio, including required fields, images, technologies, and links.
+---
+
+## Overview
+
+Projects are displayed on your portfolio to showcase your work. Each project can include a title, description, image, technologies used, GitHub link, and optional website URL.
+
+## Project Interface
+
+Projects are defined using the `Project` TypeScript interface:
+
+```typescript src/types/index.ts
+export interface Project {
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+  technologies?: string[];
+  githubLink: string;
+  website?: string;
+}
+```
+
+## Field Reference
+
+<ParamField path="title" type="string" required>
+  The name of your project. This will be displayed as the project heading.
+</ParamField>
+
+<ParamField path="description" type="string" required>
+  A brief description of what the project does. Keep it concise and informative.
+</ParamField>
+
+<ParamField path="image" type="ImageMetadata">
+  An optional image to display for the project. Import images from your assets directory.
+</ParamField>
+
+<ParamField path="technologies" type="string[]">
+  An optional array of technology names or tools used in the project (e.g., `["JavaScript", "Node.js", "React"]`).
+</ParamField>
+
+<ParamField path="githubLink" type="string" required>
+  The URL to your project's GitHub repository. This is a required field.
+</ParamField>
+
+<ParamField path="website" type="string">
+  An optional URL to the project's live website or demo.
+</ParamField>
+
+## Adding a New Project
+
+To add a new project, edit the `src/data/projects.ts` file:
+
+<CodeGroup>
+
+```typescript Basic Project
+import type { Project } from "../types";
+
+export const projects: Project[] = [
+  {
+    title: "mdast-util-slice-markdown",
+    description: "A powerful, highly configurable TypeScript library for slicing markdown Abstract Syntax Trees (AST) by character position.",
+    githubLink: "https://github.com/avivkeller/mdast-util-slice-markdown",
+  },
+  // ... other projects
+];
+```
+
+```typescript Project with Image & Technologies
+import goraLogo from "../assets/images/gora-logo.png";
+import type { Project } from "../types";
+
+export const projects: Project[] = [
+  {
+    title: "Apache Gora Website",
+    description: "The official website dedicated to the Apache Gora Project.",
+    image: goraLogo,
+    technologies: ["Bootstrap", "HTML"],
+    githubLink: "https://github.com/apache/gora-site",
+    website: "https://gora.apache.org",
+  },
+  // ... other projects
+];
+```
+
+```typescript Complete Example
+import termviewLogo from "../assets/images/termview-logo.png";
+import type { Project } from "../types";
+
+export const projects: Project[] = [
+  {
+    title: "termview",
+    description: "A package that enables rendering of images, videos, and GIFs directly in the terminal.",
+    technologies: ["JavaScript", "Node.js"],
+    githubLink: "https://github.com/avivkeller/termview",
+    image: termviewLogo,
+  },
+  // ... other projects
+];
+```
+
+</CodeGroup>
+
+## Working with Images
+
+<Note>
+  Project images should be imported at the top of the `projects.ts` file and then referenced in the project object.
+</Note>
+
+**Steps to add an image:**
+
+1. Place your image file in `src/assets/images/`
+2. Import it at the top of `projects.ts`:
+   ```typescript
+   import myProjectLogo from "../assets/images/my-project-logo.png";
+   ```
+3. Reference it in your project:
+   ```typescript
+   {
+     title: "My Project",
+     image: myProjectLogo,
+     // ... other fields
+   }
+   ```
+
+## Real-World Examples
+
+Here are actual projects from the portfolio:
+
+<Tabs>
+  <Tab title="Library Project">
+    ```typescript
+    {
+      title: "unicode-case-folding",
+      description: "Unicode case folding utilities based on the official Unicode Character Database",
+      githubLink: "https://github.com/avivkeller/unicode-case-folding",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Web Project">
+    ```typescript
+    {
+      title: "Terminal Tools",
+      description: "A diverse assortment of utilities designed for the terminal.",
+      technologies: ["JavaScript", "Node.js"],
+      githubLink: "https://github.com/avivkeller/terminaltools",
+      website: "https://tt.js.org",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Full-Featured Project">
+    ```typescript
+    {
+      title: "Apache Gora Website",
+      description: "The official website dedicated to the Apache Gora Project.",
+      image: goraLogo,
+      technologies: ["Bootstrap", "HTML"],
+      githubLink: "https://github.com/apache/gora-site",
+      website: "https://gora.apache.org",
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+- Keep descriptions concise (1-2 sentences)
+- Use clear, descriptive project titles
+- List only the most important technologies (3-5 max)
+- Ensure all URLs are valid and accessible
+- Use high-quality images with transparent backgrounds when possible
+- Order projects by importance or recency (most important/recent first)

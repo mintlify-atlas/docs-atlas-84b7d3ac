@@ -1,0 +1,279 @@
+---
+title: Managing Work Experience
+description: Learn how to add and manage your work experience, including positions, dates, technologies, and employment types.
+---
+
+## Overview
+
+The work experience section displays your professional history, including companies, positions held, duration, employment type, and technologies used.
+
+## WorkExperience Interface
+
+Work experience entries are defined using the `WorkExperience` TypeScript interface:
+
+```typescript src/types/index.ts
+export interface Position {
+  title: string;
+  duration: string;
+}
+
+export interface WorkExperience {
+  company: string;
+  website: string;
+  type: "full-time" | "part-time" | "contract" | "internship" | "volunteer";
+  positions: Position[];
+  technologies?: string[];
+}
+```
+
+## Field Reference
+
+### WorkExperience Fields
+
+<ParamField path="company" type="string" required>
+  The name of the company or organization.
+</ParamField>
+
+<ParamField path="website" type="string" required>
+  The company's official website URL.
+</ParamField>
+
+<ParamField path="type" type="enum" required>
+  The employment type. Must be one of:
+  - `"full-time"` - Full-time employment
+  - `"part-time"` - Part-time employment
+  - `"contract"` - Contract work
+  - `"internship"` - Internship position
+  - `"volunteer"` - Volunteer work
+</ParamField>
+
+<ParamField path="positions" type="Position[]" required>
+  An array of positions held at this company. See Position interface below.
+</ParamField>
+
+<ParamField path="technologies" type="string[]">
+  An optional array of technologies, tools, or skills used in this role.
+</ParamField>
+
+### Position Fields
+
+<ParamField path="title" type="string" required>
+  The job title or position name.
+</ParamField>
+
+<ParamField path="duration" type="string" required>
+  The time period for this position (e.g., "2023 - Present", "2025").
+</ParamField>
+
+## Adding New Experience
+
+To add a new work experience entry, edit the `src/data/experience.ts` file:
+
+<CodeGroup>
+
+```typescript Single Position
+import type { WorkExperience } from "../types";
+
+export const workExperience: WorkExperience[] = [
+  {
+    company: "CoW DAO",
+    positions: [
+      {
+        title: "Security Auditor",
+        duration: "2025",
+      },
+    ],
+    type: "contract",
+    technologies: ["CI/CD", "Smart Contracts", "AWS"],
+    website: "https://cow.fi",
+  },
+  // ... other experience
+];
+```
+
+```typescript Multiple Positions
+import type { WorkExperience } from "../types";
+
+export const workExperience: WorkExperience[] = [
+  {
+    company: "OpenJS Foundation",
+    positions: [
+      {
+        title: "Webpack Collaborator",
+        duration: "2025 - Present",
+      },
+      {
+        title: "Node.js Collaborator",
+        duration: "2023 - Present",
+      },
+    ],
+    type: "volunteer",
+    technologies: ["JavaScript", "C++", "Node.js", "V8", "Security"],
+    website: "https://openjsf.org",
+  },
+  // ... other experience
+];
+```
+
+</CodeGroup>
+
+## Employment Types
+
+<Tabs>
+  <Tab title="Volunteer">
+    ```typescript
+    {
+      company: "OpenJS Foundation",
+      type: "volunteer",
+      positions: [
+        {
+          title: "Node.js Collaborator",
+          duration: "2023 - Present",
+        },
+      ],
+      technologies: ["JavaScript", "C++", "Node.js", "V8", "Security"],
+      website: "https://openjsf.org",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Contract">
+    ```typescript
+    {
+      company: "CoW DAO",
+      type: "contract",
+      positions: [
+        {
+          title: "Security Auditor",
+          duration: "2025",
+        },
+      ],
+      technologies: ["CI/CD", "Smart Contracts", "AWS"],
+      website: "https://cow.fi",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Full-Time">
+    ```typescript
+    {
+      company: "Example Company",
+      type: "full-time",
+      positions: [
+        {
+          title: "Senior Software Engineer",
+          duration: "2024 - Present",
+        },
+      ],
+      technologies: ["React", "TypeScript", "Node.js"],
+      website: "https://example.com",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Internship">
+    ```typescript
+    {
+      company: "Tech Startup",
+      type: "internship",
+      positions: [
+        {
+          title: "Software Engineering Intern",
+          duration: "Summer 2023",
+        },
+      ],
+      technologies: ["Python", "Django", "PostgreSQL"],
+      website: "https://techstartup.com",
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Multiple Positions at Same Company
+
+<Note>
+  When you've held multiple positions at the same company, add them all to the `positions` array. List them in reverse chronological order (most recent first).
+</Note>
+
+```typescript
+{
+  company: "OpenJS Foundation",
+  positions: [
+    {
+      title: "Webpack Collaborator",
+      duration: "2025 - Present",
+    },
+    {
+      title: "Node.js Collaborator",
+      duration: "2023 - Present",
+    },
+  ],
+  type: "volunteer",
+  technologies: ["JavaScript", "C++", "Node.js", "V8", "Security"],
+  website: "https://openjsf.org",
+}
+```
+
+## Duration Format Examples
+
+- Current position: `"2023 - Present"`
+- Completed position: `"2022 - 2024"`
+- Single year: `"2025"`
+- Specific months: `"Jan 2023 - Jun 2024"`
+- Season: `"Summer 2023"`
+- Multiple ongoing: `"2023 - Present"` (for each position)
+
+## Real-World Examples
+
+Here are the actual experience entries from the portfolio:
+
+<Tabs>
+  <Tab title="Open Source Contributor">
+    ```typescript
+    {
+      company: "OpenJS Foundation",
+      positions: [
+        {
+          title: "Webpack Collaborator",
+          duration: "2025 - Present",
+        },
+        {
+          title: "Node.js Collaborator",
+          duration: "2023 - Present",
+        },
+      ],
+      type: "volunteer",
+      technologies: ["JavaScript", "C++", "Node.js", "V8", "Security"],
+      website: "https://openjsf.org",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Contract Work">
+    ```typescript
+    {
+      company: "CoW DAO",
+      positions: [
+        {
+          title: "Security Auditor",
+          duration: "2025",
+        },
+      ],
+      type: "contract",
+      technologies: ["CI/CD", "Smart Contracts", "AWS"],
+      website: "https://cow.fi",
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+- Order entries by start date (most recent first)
+- Use consistent date formatting throughout
+- List positions within a company in reverse chronological order
+- Include 3-7 key technologies per role
+- Ensure company websites are valid and accessible
+- Use "Present" for current positions
+- Be specific with job titles
+- Include relevant technical skills and tools

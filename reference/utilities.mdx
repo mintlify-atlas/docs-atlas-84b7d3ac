@@ -1,0 +1,241 @@
+---
+title: "Utilities Reference"
+description: "Utility functions and helper modules for Aviv Keller's portfolio website"
+---
+
+## Overview
+
+Utility functions are defined in `src/utils/index.ts` and provide reusable helper functionality across the application.
+
+## Social Sharing
+
+### createShareUrls
+
+Generates social media share URLs for various platforms.
+
+**Source:** `src/utils/index.ts:1-37`
+
+#### Function Signature
+
+```typescript
+function createShareUrls(
+  url: string,
+  title: string,
+  description: string,
+): Array<{
+  icon: string;
+  url: string;
+  label: string;
+}>
+```
+
+#### Parameters
+
+<ParamField path="url" type="string" required>
+  The URL to be shared. Should be a fully qualified URL including protocol.
+
+  **Examples:**
+  - `"https://aviv.sh/blog/my-post"`
+  - `"https://aviv.sh/projects"`
+</ParamField>
+
+<ParamField path="title" type="string" required>
+  The title or headline for the shared content.
+
+  **Examples:**
+  - `"My Latest Blog Post"`
+  - `"Check out my new project"`
+</ParamField>
+
+<ParamField path="description" type="string" required>
+  A description or summary of the content being shared.
+
+  **Examples:**
+  - `"Learn how to build fast websites with Astro"`
+  - `"My experience contributing to Node.js core"`
+</ParamField>
+
+#### Return Value
+
+Returns an array of share button configurations, each containing:
+
+<ResponseField name="icon" type="string">
+  Icon identifier for the platform using astro-icon format.
+
+  **Values:**
+  - `"simple-icons:x"` - X (Twitter)
+  - `"simple-icons:linkedin"` - LinkedIn
+  - `"simple-icons:facebook"` - Facebook
+  - `"simple-icons:reddit"` - Reddit
+  - `"simple-icons:gmail"` - Email
+</ResponseField>
+
+<ResponseField name="url" type="string">
+  The platform-specific share URL with properly encoded parameters.
+</ResponseField>
+
+<ResponseField name="label" type="string">
+  Human-readable label for accessibility and display.
+
+  **Values:**
+  - `"Share on X"`
+  - `"Share on LinkedIn"`
+  - `"Share on Facebook"`
+  - `"Share on Reddit"`
+  - `"Share via Email"`
+</ResponseField>
+
+#### Platforms Supported
+
+The function generates share URLs for the following platforms:
+
+<Accordion title="X (Twitter)">
+  **API Format:** `https://twitter.com/share?url={url}&text={title}`
+
+  **Parameters:**
+  - `url` - The page URL (URL-encoded)
+  - `text` - The title/message (URL-encoded)
+</Accordion>
+
+<Accordion title="LinkedIn">
+  **API Format:** `https://www.linkedin.com/shareArticle?url={url}&text={title}`
+
+  **Parameters:**
+  - `url` - The page URL (URL-encoded)
+  - `text` - The title/message (URL-encoded)
+</Accordion>
+
+<Accordion title="Facebook">
+  **API Format:** `https://www.facebook.com/sharer/sharer.php?u={url}`
+
+  **Parameters:**
+  - `u` - The page URL (URL-encoded)
+</Accordion>
+
+<Accordion title="Reddit">
+  **API Format:** `https://www.reddit.com/submit?u={url}&t={title}`
+
+  **Parameters:**
+  - `u` - The page URL (URL-encoded)
+  - `t` - The title (URL-encoded)
+</Accordion>
+
+<Accordion title="Email">
+  **API Format:** `mailto:?subject={title}&text={description}%0A{url}`
+
+  **Parameters:**
+  - `subject` - The email subject (URL-encoded)
+  - `text` - Email body with description and URL (URL-encoded)
+</Accordion>
+
+#### Usage Example
+
+```typescript
+import { createShareUrls } from "../utils";
+
+const shareButtons = createShareUrls(
+  "https://aviv.sh/blog/my-latest-post",
+  "My Latest Blog Post",
+  "Learn about my recent experiences with Astro and TypeScript"
+);
+
+// Returns:
+// [
+//   {
+//     icon: "simple-icons:x",
+//     url: "https://twitter.com/share?url=https%3A%2F%2Faviv.sh%2Fblog%2Fmy-latest-post&text=My%20Latest%20Blog%20Post",
+//     label: "Share on X"
+//   },
+//   {
+//     icon: "simple-icons:linkedin",
+//     url: "https://www.linkedin.com/shareArticle?url=https%3A%2F%2Faviv.sh%2Fblog%2Fmy-latest-post&text=My%20Latest%20Blog%20Post",
+//     label: "Share on LinkedIn"
+//   },
+//   // ... more platforms
+// ]
+```
+
+#### Usage in Components
+
+Typically used in the `ShareButtons.astro` component:
+
+```astro
+---
+import { createShareUrls } from "../utils";
+import Icon from "./Icon.astro";
+
+interface Props {
+  url: string;
+  title: string;
+  description: string;
+}
+
+const { url, title, description } = Astro.props;
+const shareUrls = createShareUrls(url, title, description);
+---
+
+<div class="share-buttons">
+  {shareUrls.map(({ icon, url, label }) => (
+    <a href={url} target="_blank" rel="noopener noreferrer" aria-label={label}>
+      <Icon name={icon} />
+    </a>
+  ))}
+</div>
+```
+
+#### Implementation Details
+
+<Accordion title="URL Encoding">
+  The function uses JavaScript's `encodeURIComponent()` to properly encode all parameters:
+
+  ```typescript
+  const encodedUrl = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(title);
+  const encodedDesc = encodeURIComponent(description);
+  ```
+
+  This ensures special characters are properly handled in share URLs.
+</Accordion>
+
+<Accordion title="Email Formatting">
+  The email share includes both the description and URL in the body:
+
+  ```
+  subject: {title}
+  body: {description}
+        {url}
+  ```
+
+  The `%0A` represents a newline character between the description and URL.
+</Accordion>
+
+## Related Components
+
+The utilities are used by the following components:
+
+- **ShareButtons.astro** (`src/components/common/ShareButtons.astro`) - Renders social share buttons using `createShareUrls()`
+- **SocialLinks.astro** (`src/components/common/SocialLinks.astro`) - Displays profile social links (uses data from `src/data/index.ts`)
+
+## Best Practices
+
+<Card title="URL Validation" icon="shield-check">
+  Always pass fully qualified URLs (including `https://`) to `createShareUrls()` to ensure proper sharing across platforms.
+</Card>
+
+<Card title="Title Length" icon="text">
+  Keep titles concise (under 100 characters) for optimal display on social media platforms, especially Twitter/X.
+</Card>
+
+<Card title="Description Length" icon="align-left">
+  Descriptions should be 150-200 characters for best results across platforms.
+</Card>
+
+## Future Enhancements
+
+Potential additions to the utilities module:
+
+- Date formatting helpers
+- String truncation utilities
+- Slug generation functions
+- Reading time calculation
+- SEO metadata generation

@@ -1,0 +1,215 @@
+---
+title: Managing Achievements
+description: Learn how to add and manage achievements, including awards, certifications, CVEs, and hall of fame recognitions.
+---
+
+## Overview
+
+Achievements showcase your recognitions, awards, security disclosures, and other professional accomplishments. Each achievement includes a title, optional icon, and a URL for verification.
+
+## Achievement Interface
+
+Achievements are defined using the `Achievement` TypeScript interface:
+
+```typescript src/types/index.ts
+export interface Achievement {
+  title: string;
+  icon?: string;
+  url: string;
+}
+```
+
+## Field Reference
+
+<ParamField path="title" type="string" required>
+  The name or description of your achievement. Be specific and clear.
+</ParamField>
+
+<ParamField path="icon" type="string">
+  An optional icon identifier. Use icons from [Iconify](https://icon-sets.iconify.design/), such as `"simple-icons:github"` or `"mdi:school"`.
+</ParamField>
+
+<ParamField path="url" type="string" required>
+  The URL that verifies or provides more information about the achievement. Can be a Hall of Fame page, CVE listing, or official recognition page.
+</ParamField>
+
+## Adding a New Achievement
+
+To add a new achievement, edit the `src/data/achievements.ts` file:
+
+<CodeGroup>
+
+```typescript Hall of Fame
+import type { Achievement } from "../types";
+
+export const achievements: Achievement[] = [
+  {
+    title: "GitHub Security Bug Bounty Hunter",
+    icon: "simple-icons:github",
+    url: "https://github.com/orgs/GitHubBounty/people?query=avivkeller",
+  },
+  // ... other achievements
+];
+```
+
+```typescript CVE Disclosure
+import type { Achievement } from "../types";
+
+export const achievements: Achievement[] = [
+  {
+    title: "CVE-2025-48987",
+    icon: "simple-icons:vercel",
+    url: "https://nvd.nist.gov/vuln/detail/CVE-2025-48987",
+  },
+  // ... other achievements
+];
+```
+
+```typescript Without Icon
+import type { Achievement } from "../types";
+
+export const achievements: Achievement[] = [
+  {
+    title: "Visma Hall of Fame",
+    url: "https://www.visma.com/trust-centre/security/hall-of-fame",
+  },
+  // ... other achievements
+];
+```
+
+</CodeGroup>
+
+## Icon Selection
+
+<Note>
+  Icons use the Iconify format. Browse available icons at [icon-sets.iconify.design](https://icon-sets.iconify.design/).
+</Note>
+
+### Common Icon Prefixes
+
+- `simple-icons:` - Brand icons (GitHub, Google, Apple, etc.)
+- `mdi:` - Material Design Icons (generic symbols)
+- Custom brand icons when available
+
+### Icon Examples
+
+```typescript
+icon: "simple-icons:github"      // GitHub logo
+icon: "simple-icons:google"      // Google logo
+icon: "simple-icons:apple"       // Apple logo
+icon: "mdi:school"               // Education/school icon
+icon: "mdi:language-java"        // Java programming language
+icon: "simple-icons:nasa"        // NASA logo
+```
+
+## Real-World Examples
+
+Here are actual achievements from the portfolio:
+
+<Tabs>
+  <Tab title="Award">
+    ```typescript
+    {
+      title: "JavaScriptLandia \"Outstanding Contribution from a New Arrival\"",
+      icon: "simple-icons:openjsfoundation",
+      url: "https://openjsf.org/blog/javascriptlandia-awards-2025"
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Company Recognition">
+    ```typescript
+    {
+      title: "Google Hall of Fame",
+      icon: "simple-icons:google",
+      url: "https://bughunters.google.com/profile/862b3197-06d6-442d-b82e-5a0cdb544c3e",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="CVE">
+    ```typescript
+    {
+      title: "CVE-2024-39700",
+      icon: "simple-icons:jupyter",
+      url: "https://github.com/jupyterlab/extension-template/security/advisories/GHSA-45gq-v5wm-82wg",
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Document Link">
+    ```typescript
+    {
+      title: "NASA Letter of Appreciation",
+      icon: "simple-icons:nasa",
+      url: "/assets/documents/nasa_rec.pdf",
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Achievement Categories
+
+Achievements typically fall into these categories:
+
+### Security Disclosures
+- CVEs (Common Vulnerabilities and Exposures)
+- Bug bounty recognitions
+- Security hall of fame entries
+
+```typescript
+{
+  title: "CVE-2024-28866",
+  icon: "simple-icons:gocd",
+  url: "https://github.com/gocd/gocd/security/advisories/GHSA-q882-q6mm-mgvh",
+}
+```
+
+### Hall of Fame
+- Company/organization recognition
+- Open source project acknowledgments
+- Platform contributor lists
+
+```typescript
+{
+  title: "Apache Hall of Fame",
+  icon: "simple-icons:apache",
+  url: "https://security.apache.org/blog/credits/",
+}
+```
+
+### Awards & Certifications
+- Industry awards
+- Professional certifications
+- Competition wins
+
+```typescript
+{
+  title: "JavaScriptLandia \"Outstanding Contribution from a New Arrival\"",
+  icon: "simple-icons:openjsfoundation",
+  url: "https://openjsf.org/blog/javascriptlandia-awards-2025"
+}
+```
+
+### Letters of Appreciation
+- Official recognition documents
+- Recommendation letters
+- Acknowledgment certificates
+
+```typescript
+{
+  title: "Verizon Letter of Appreciation",
+  icon: "simple-icons:verizon",
+  url: "/assets/documents/verizon_rec.pdf",
+}
+```
+
+## Best Practices
+
+- Order achievements by importance or date (most recent/important first)
+- Use consistent naming for similar achievement types
+- Always verify URLs are publicly accessible
+- For CVEs, link to official databases (NVD, GitHub Security Advisories)
+- Choose icons that represent the organization or achievement type
+- Keep titles clear and professional
+- For document links, ensure files are in your `public/assets/documents/` directory

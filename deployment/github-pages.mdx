@@ -1,0 +1,180 @@
+---
+title: Deploy to GitHub Pages
+description: Step-by-step guide to deploy your Astro portfolio to GitHub Pages with automated CI/CD
+---
+
+This guide walks you through deploying the Astro portfolio website to GitHub Pages using GitHub Actions for automated deployments.
+
+## Prerequisites
+
+- A GitHub account
+- Your portfolio code pushed to a GitHub repository
+- GitHub Pages enabled for your repository
+
+## Repository Setup
+
+<Steps>
+  <Step title="Enable GitHub Pages">
+    Navigate to your repository settings on GitHub:
+    1. Go to **Settings** > **Pages**
+    2. Under **Source**, select **GitHub Actions**
+    3. Save your changes
+  </Step>
+
+  <Step title="Configure Repository Permissions">
+    Ensure your repository has the correct permissions for GitHub Actions:
+    - Go to **Settings** > **Actions** > **General**
+    - Under **Workflow permissions**, select **Read and write permissions**
+    - Check **Allow GitHub Actions to create and approve pull requests**
+    - Click **Save**
+  </Step>
+</Steps>
+
+## GitHub Actions Workflow
+
+The portfolio uses an automated deployment workflow located at `.github/workflows/deploy.yml`. This workflow:
+
+- Triggers on pushes to the `gh-pages` branch
+- Can be manually triggered via the Actions tab
+- Builds and deploys your site automatically
+
+<CodeGroup>
+```yaml .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [gh-pages]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      - name: Install, build, and upload your site
+        uses: withastro/action@v4
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+</CodeGroup>
+
+<Note>
+The workflow uses the official `withastro/action@v4` which automatically handles Node.js setup, dependency installation, and the build process using the `astro build` command.
+</Note>
+
+## Deployment Process
+
+<Steps>
+  <Step title="Push to the gh-pages branch">
+    The deployment automatically triggers when you push to the `gh-pages` branch:
+    
+    ```bash
+    git add .
+    git commit -m "Update site"
+    git push origin gh-pages
+    ```
+  </Step>
+
+  <Step title="Monitor the deployment">
+    1. Go to the **Actions** tab in your GitHub repository
+    2. Click on the latest workflow run
+    3. Watch the build and deploy steps complete
+    4. Once successful, your site will be live
+  </Step>
+
+  <Step title="Access your deployed site">
+    Your site will be available at:
+    - `https://<username>.github.io/<repository-name>/` (default)
+    - Or your custom domain if configured (see [Custom Domain](/deployment/custom-domain))
+  </Step>
+</Steps>
+
+## Build Command
+
+The build process uses the following command defined in `package.json`:
+
+```json
+"build": "astro build"
+```
+
+This command:
+- Compiles your Astro components
+- Processes Tailwind CSS styles
+- Generates a static site in the `dist/` directory
+- Creates a sitemap (via `@astrojs/sitemap` integration)
+
+## Manual Deployment
+
+You can also trigger a deployment manually:
+
+<Steps>
+  <Step title="Navigate to Actions tab">
+    Go to your repository's **Actions** tab on GitHub
+  </Step>
+
+  <Step title="Select the workflow">
+    Click on "Deploy to GitHub Pages" in the left sidebar
+  </Step>
+
+  <Step title="Run workflow">
+    Click the **Run workflow** button, select the `gh-pages` branch, and click **Run workflow**
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+### Build Fails
+
+<Warning>
+If your build fails, check the Actions logs for specific error messages.
+</Warning>
+
+**Common issues:**
+
+- **Missing dependencies**: Ensure all dependencies are listed in `package.json`
+- **Type errors**: Run `npm run check:types` locally before pushing
+- **Build errors**: Test the build locally with `npm run build`
+
+### Site Not Updating
+
+1. **Check workflow status**: Verify the workflow completed successfully in the Actions tab
+2. **Clear browser cache**: Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R)
+3. **Verify branch**: Ensure you pushed to the correct branch (`gh-pages`)
+4. **Check Pages settings**: Confirm GitHub Pages is set to use GitHub Actions as the source
+
+### Permissions Error
+
+If you see a permissions error:
+
+1. Go to **Settings** > **Actions** > **General**
+2. Under **Workflow permissions**, select **Read and write permissions**
+3. Enable **Allow GitHub Actions to create and approve pull requests**
+4. Re-run the failed workflow
+
+### 404 Errors on Deployment
+
+If your site shows 404 errors:
+
+1. **Check the site URL**: Verify the `site` configuration in `astro.config.mjs` matches your deployment URL
+2. **Base path**: If deploying to a subpath (not root), you may need to configure the `base` option in `astro.config.mjs`
+3. **CNAME file**: If using a custom domain, ensure the CNAME file is present (see [Custom Domain](/deployment/custom-domain))
+
+<Note>
+The current configuration sets the site URL to `https://aviv.sh`, which indicates a custom domain is being used.
+</Note>

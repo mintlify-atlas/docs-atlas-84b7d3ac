@@ -1,0 +1,331 @@
+---
+title: Card Components
+description: Specialized card components for displaying projects, blog posts, work experience, and achievements
+---
+
+## Overview
+
+Card components are specialized display components that present structured data in a consistent, visually appealing format. All card components are located in `src/components/cards/`.
+
+## ProjectCard
+
+Displays a project with an image, title, description, technologies, and links.
+
+### Props
+
+<ParamField path="project" type="Project" required>
+  Project object with the following structure:
+  
+  <ParamField path="project.title" type="string" required>
+    Project name
+  </ParamField>
+  
+  <ParamField path="project.description" type="string" required>
+    Brief project description
+  </ParamField>
+  
+  <ParamField path="project.image" type="ImageMetadata">
+    Project screenshot or logo (optional)
+  </ParamField>
+  
+  <ParamField path="project.technologies" type="string[]">
+    Array of technology names (e.g., ["React", "TypeScript"])
+  </ParamField>
+  
+  <ParamField path="project.githubLink" type="string" required>
+    URL to the GitHub repository
+  </ParamField>
+  
+  <ParamField path="project.website" type="string">
+    URL to the live website (optional)
+  </ParamField>
+</ParamField>
+
+### Usage
+
+```astro
+---
+import ProjectCard from "../components/cards/ProjectCard.astro";
+import { projects } from "../data";
+---
+
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+  {projects.map((project) => <ProjectCard project={project} />)}
+</div>
+```
+
+### Features
+
+- Image with hover zoom animation
+- Technology badges
+- GitHub and website links with icons
+- Hover effects (shadow, lift, color transition)
+- Responsive layout
+
+### Example Data
+
+```typescript
+const project = {
+  title: "My Awesome Project",
+  description: "A revolutionary tool that solves real problems",
+  image: import("./images/project.png"),
+  technologies: ["TypeScript", "Astro", "TailwindCSS"],
+  githubLink: "https://github.com/username/project",
+  website: "https://project.example.com"
+};
+```
+
+## BlogCard
+
+Displays a blog post with title, description, publish date, and reading time.
+
+### Props
+
+<ParamField path="post" type="BlogPost" required>
+  Blog post object with frontmatter:
+  
+  <ParamField path="post.url" type="string" required>
+    URL to the blog post
+  </ParamField>
+  
+  <ParamField path="post.frontmatter.title" type="string" required>
+    Post title
+  </ParamField>
+  
+  <ParamField path="post.frontmatter.description" type="string" required>
+    Post description or excerpt
+  </ParamField>
+  
+  <ParamField path="post.frontmatter.pubDate" type="string" required>
+    Publication date (e.g., "Jan 15, 2024")
+  </ParamField>
+  
+  <ParamField path="post.frontmatter.readingTime" type="string" required>
+    Estimated reading time (e.g., "5 min read")
+  </ParamField>
+</ParamField>
+
+### Usage
+
+```astro
+---
+import BlogCard from "../components/cards/BlogCard.astro";
+
+const blogs = Object.values(
+  import.meta.glob("./posts/*.md", { eager: true })
+);
+---
+
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+  {blogs.map((post) => <BlogCard post={post} />)}
+</div>
+```
+
+### Features
+
+- Clickable card linking to full post
+- Calendar and clock icons for metadata
+- HTML description support
+- Hover effects
+
+### Example Data
+
+```markdown
+---
+title: "Understanding Astro Components"
+description: "A deep dive into Astro's component architecture"
+pubDate: "Mar 4, 2026"
+readingTime: "8 min read"
+---
+
+Your blog content here...
+```
+
+## WorkExperienceCard
+
+Displays work experience with company name, positions, duration, and technologies.
+
+### Props
+
+<ParamField path="experience" type="WorkExperience" required>
+  Work experience object:
+  
+  <ParamField path="experience.company" type="string" required>
+    Company name
+  </ParamField>
+  
+  <ParamField path="experience.website" type="string" required>
+    Company website URL
+  </ParamField>
+  
+  <ParamField path="experience.type" type="string" required>
+    Employment type: `"full-time"`, `"part-time"`, `"contract"`, `"internship"`, or `"volunteer"`
+  </ParamField>
+  
+  <ParamField path="experience.positions" type="Position[]" required>
+    Array of positions at the company:
+    
+    <ParamField path="positions[].title" type="string" required>
+      Job title
+    </ParamField>
+    
+    <ParamField path="positions[].duration" type="string" required>
+      Duration (e.g., "Jan 2023 - Present")
+    </ParamField>
+  </ParamField>
+  
+  <ParamField path="experience.technologies" type="string[]">
+    Array of technologies used (optional)
+  </ParamField>
+</ParamField>
+
+### Usage
+
+```astro
+---
+import WorkExperienceCard from "../components/cards/WorkExperienceCard.astro";
+import { workExperience } from "../data";
+---
+
+<div class="mx-auto grid max-w-6xl grid-cols-1 gap-8 lg:grid-cols-2">
+  {workExperience.map((experience) => (
+    <WorkExperienceCard experience={experience} />
+  ))}
+</div>
+```
+
+### Features
+
+- Type-based badge with icon (full-time, contract, etc.)
+- Multiple positions support
+- Technology badges
+- Clickable card linking to company website
+- Calendar icon for duration
+
+### Example Data
+
+```typescript
+const experience = {
+  company: "Tech Corp",
+  website: "https://techcorp.example.com",
+  type: "full-time",
+  positions: [
+    {
+      title: "Senior Developer",
+      duration: "Jan 2023 - Present"
+    },
+    {
+      title: "Developer",
+      duration: "Mar 2021 - Dec 2022"
+    }
+  ],
+  technologies: ["TypeScript", "React", "Node.js"]
+};
+```
+
+### Type Configuration
+
+Each employment type has a specific badge color and icon:
+
+- **full-time**: Green badge with briefcase icon
+- **part-time**: Blue badge with clock icon
+- **contract**: Gray badge with handshake icon
+- **internship**: Orange badge with school icon
+- **volunteer**: Red badge with heart icon
+
+## AchievementCard
+
+Displays an achievement or recognition with an icon and title.
+
+### Props
+
+<ParamField path="achievement" type="Achievement" required>
+  Achievement object:
+  
+  <ParamField path="achievement.title" type="string" required>
+    Achievement title
+  </ParamField>
+  
+  <ParamField path="achievement.icon" type="string">
+    Iconify icon name (defaults to `"mdi:security"`)
+  </ParamField>
+  
+  <ParamField path="achievement.url" type="string" required>
+    URL to achievement details or certificate
+  </ParamField>
+</ParamField>
+
+### Usage
+
+```astro
+---
+import AchievementCard from "../components/cards/AchievementCard.astro";
+import { achievements } from "../data";
+---
+
+<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+  {achievements.map((achievement) => (
+    <AchievementCard achievement={achievement} />
+  ))}
+</div>
+```
+
+### Features
+
+- Large icon display
+- Clickable card opening in new tab
+- Centered layout
+- Icon color transition on hover
+
+### Example Data
+
+```typescript
+const achievement = {
+  title: "HackerOne Top 100",
+  icon: "mdi:shield-check",
+  url: "https://hackerone.com/username"
+};
+```
+
+## Common Features
+
+All card components share these features:
+
+### Base Card Component
+
+They all use the `Card` UI component (see [UI Elements](/components/ui-elements)) which provides:
+
+- Rounded corners (`rounded-2xl`)
+- Shadow effects with hover animation
+- Lift effect on hover (`hover:-translate-y-1`)
+- Smooth transitions
+
+### Hover Effects
+
+- Shadow intensity increase
+- Vertical lift animation
+- Color transitions on text/icons
+- Image zoom (ProjectCard)
+
+### Responsive Design
+
+Cards work across all screen sizes:
+
+```astro
+<!-- Mobile: 1 column, Tablet: 2 columns, Desktop: 3 columns -->
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+  {items.map((item) => <Card {...item} />)}
+</div>
+```
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="UI Elements" icon="square" href="/components/ui-elements">
+    Learn about the base Card, Badge, and Icon components
+  </Card>
+  
+  <Card title="Sections" icon="layout" href="/components/sections">
+    See how to organize cards into sections
+  </Card>
+</CardGroup>

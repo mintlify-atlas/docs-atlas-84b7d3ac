@@ -1,0 +1,206 @@
+---
+title: Introduction
+description: Build your own professional portfolio website with Astro, TailwindCSS, and modern web technologies
+mode: custom
+---
+
+<div className="relative overflow-hidden dark:bg-[#0f1117] bg-white py-20">
+  <div className="absolute inset-0 bg-gradient-to-br from-[#d40000]/10 via-transparent to-[#a1a1a2]/10"></div>
+  <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="mx-auto max-w-3xl text-center">
+      <h1 className="text-4xl font-bold tracking-tight dark:text-white text-gray-900 sm:text-5xl md:text-6xl">
+        Aviv Keller Portfolio Documentation
+      </h1>
+      <p className="mt-6 text-lg leading-8 dark:text-gray-400 text-gray-600 max-w-2xl mx-auto">
+        A modern, fully customizable portfolio template built with Astro and TailwindCSS. Showcase your projects, achievements, and experience with style.
+      </p>
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/quickstart"
+          className="rounded-full bg-[#d40000] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#b00000] transition-colors"
+        >
+          Get Started
+        </a>
+        <a
+          href="/components/overview"
+          className="rounded-full border border-gray-300 dark:border-gray-700 bg-white/10 dark:bg-white/5 px-6 py-3 text-sm font-semibold dark:text-white text-gray-900 hover:bg-white/20 dark:hover:bg-white/10 transition-colors"
+        >
+          Explore Components
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <h2 className="text-2xl font-semibold dark:text-white text-gray-900 mb-4">Quick Start</h2>
+  <p className="text-base dark:text-gray-400 text-gray-600 mb-8">
+    Get your portfolio up and running in minutes with these simple steps.
+  </p>
+
+  <Steps>
+    <Step title="Clone the repository">
+      Clone the repository to your local machine:
+      
+      ```bash
+      git clone https://github.com/avivkeller/avivkeller.github.io.git
+      cd avivkeller.github.io
+      ```
+    </Step>
+
+    <Step title="Install dependencies">
+      Install the required npm packages:
+      
+      ```bash
+      npm install
+      ```
+      
+      The project uses Astro 5.x, TailwindCSS 4.x, and includes TypeScript support.
+    </Step>
+
+    <Step title="Start the development server">
+      Launch the local development server:
+      
+      ```bash
+      npm run dev
+      ```
+      
+      Your site will be available at `http://localhost:4321`. Changes will hot-reload automatically.
+    </Step>
+
+    <Step title="Customize your content">
+      Edit the data files in `src/data/` to add your own projects, achievements, and experience:
+      
+      - `projects.ts` - Your portfolio projects
+      - `achievements.ts` - Awards and recognition
+      - `experience.ts` - Work history
+      - `index.ts` - Site configuration and social links
+      
+      See the [Content Management](/content/projects) guide for details.
+    </Step>
+  </Steps>
+</div>
+
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <h2 className="text-2xl font-semibold dark:text-white text-gray-900 mb-4">Key Features</h2>
+  <p className="text-base dark:text-gray-400 text-gray-600 mb-8">
+    Everything you need to build a professional portfolio website.
+  </p>
+
+  <CardGroup cols={2}>
+    <Card title="Component-Based Architecture" icon="cubes" href="/components/overview">
+      Reusable Astro components for cards, buttons, sections, and more. Build consistent UIs quickly.
+    </Card>
+    <Card title="TailwindCSS Styling" icon="palette" href="/customization/styling">
+      Modern utility-first CSS framework with custom design system. Fully responsive and customizable.
+    </Card>
+    <Card title="TypeScript Support" icon="code" href="/reference/types">
+      Strongly-typed interfaces for projects, achievements, and experience. Catch errors early.
+    </Card>
+    <Card title="SEO Optimized" icon="magnifying-glass" href="/deployment/build-configuration">
+      Built-in SEO features with Astro SEO integration and automatic sitemap generation.
+    </Card>
+    <Card title="Blog Ready" icon="book-open" href="/content/blog-posts">
+      Integrated markdown blog system. Write posts in MDX with frontmatter support.
+    </Card>
+    <Card title="GitHub Pages Deploy" icon="rocket" href="/deployment/github-pages">
+      Pre-configured for GitHub Pages deployment. Push to deploy in seconds.
+    </Card>
+  </CardGroup>
+</div>
+
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <h2 className="text-2xl font-semibold dark:text-white text-gray-900 mb-4">Explore by Topic</h2>
+  <p className="text-base dark:text-gray-400 text-gray-600 mb-8">
+    Jump into the section that interests you most.
+  </p>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <a
+      href="/content/projects"
+      className="group block rounded-2xl border dark:border-[#27272a] border-gray-200 dark:hover:border-[#a1a1a2] hover:border-[#d40000] overflow-hidden no-underline transition-colors"
+    >
+      <div className="h-56 dark:bg-[#1a1d27] bg-gray-50 flex items-center justify-center overflow-hidden">
+        <div className="text-6xl">📁</div>
+      </div>
+      <div className="p-6">
+        <h3 className="text-base font-semibold dark:text-white text-gray-900 mb-2">Content Management</h3>
+        <p className="text-sm dark:text-gray-400 text-gray-600 mb-4">
+          Learn how to manage your projects, achievements, experience, and blog posts.
+        </p>
+        <div className="flex items-center text-sm dark:text-[#a1a1a2] text-[#d40000] dark:group-hover:text-[#a1a1a2] group-hover:text-[#d40000]">
+          <span>Explore content →</span>
+        </div>
+      </div>
+    </a>
+
+    <a
+      href="/customization/styling"
+      className="group block rounded-2xl border dark:border-[#27272a] border-gray-200 dark:hover:border-[#a1a1a2] hover:border-[#d40000] overflow-hidden no-underline transition-colors"
+    >
+      <div className="h-56 dark:bg-[#1a1d27] bg-gray-50 flex items-center justify-center overflow-hidden">
+        <div className="text-6xl">🎨</div>
+      </div>
+      <div className="p-6">
+        <h3 className="text-base font-semibold dark:text-white text-gray-900 mb-2">Customization</h3>
+        <p className="text-sm dark:text-gray-400 text-gray-600 mb-4">
+          Customize colors, fonts, layouts, and styles to match your personal brand.
+        </p>
+        <div className="flex items-center text-sm dark:text-[#a1a1a2] text-[#d40000] dark:group-hover:text-[#a1a1a2] group-hover:text-[#d40000]">
+          <span>Learn customization →</span>
+        </div>
+      </div>
+    </a>
+
+    <a
+      href="/components/overview"
+      className="group block rounded-2xl border dark:border-[#27272a] border-gray-200 dark:hover:border-[#a1a1a2] hover:border-[#d40000] overflow-hidden no-underline transition-colors"
+    >
+      <div className="h-56 dark:bg-[#1a1d27] bg-gray-50 flex items-center justify-center overflow-hidden">
+        <div className="text-6xl">🧩</div>
+      </div>
+      <div className="p-6">
+        <h3 className="text-base font-semibold dark:text-white text-gray-900 mb-2">Components Reference</h3>
+        <p className="text-sm dark:text-gray-400 text-gray-600 mb-4">
+          Complete reference for all available UI components, cards, and layout elements.
+        </p>
+        <div className="flex items-center text-sm dark:text-[#a1a1a2] text-[#d40000] dark:group-hover:text-[#a1a1a2] group-hover:text-[#d40000]">
+          <span>Browse components →</span>
+        </div>
+      </div>
+    </a>
+
+    <a
+      href="/deployment/github-pages"
+      className="group block rounded-2xl border dark:border-[#27272a] border-gray-200 dark:hover:border-[#a1a1a2] hover:border-[#d40000] overflow-hidden no-underline transition-colors"
+    >
+      <div className="h-56 dark:bg-[#1a1d27] bg-gray-50 flex items-center justify-center overflow-hidden">
+        <div className="text-6xl">🚀</div>
+      </div>
+      <div className="p-6">
+        <h3 className="text-base font-semibold dark:text-white text-gray-900 mb-2">Deployment</h3>
+        <p className="text-sm dark:text-gray-400 text-gray-600 mb-4">
+          Deploy your portfolio to GitHub Pages or configure a custom domain.
+        </p>
+        <div className="flex items-center text-sm dark:text-[#a1a1a2] text-[#d40000] dark:group-hover:text-[#a1a1a2] group-hover:text-[#d40000]">
+          <span>Deploy now →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div className="mt-16 mb-16 max-w-5xl mx-auto px-6">
+  <div className="rounded-2xl dark:bg-[#1a1d27] bg-gray-50 border dark:border-[#27272a] border-gray-200 p-8 text-center">
+    <h2 className="text-2xl font-semibold dark:text-white text-gray-900 mb-4">Ready to Build Your Portfolio?</h2>
+    <p className="text-base dark:text-gray-400 text-gray-600 mb-6 max-w-2xl mx-auto">
+      Start building your professional portfolio website today. Follow the quickstart guide to get up and running in minutes.
+    </p>
+    <a
+      href="/quickstart"
+      className="inline-block rounded-full bg-[#d40000] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#b00000] transition-colors"
+    >
+      Get Started Now
+    </a>
+  </div>
+</div>

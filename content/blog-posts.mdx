@@ -1,0 +1,290 @@
+---
+title: Writing Blog Posts
+description: Learn how to create and manage blog posts, including frontmatter configuration, markdown content, and reading time calculation.
+---
+
+## Overview
+
+Blog posts are written in Markdown format with frontmatter metadata. Each post includes a title, description, publication date, and reading time estimate.
+
+## BlogPost Interface
+
+Blog posts are defined using the `BlogPost` TypeScript interface:
+
+```typescript src/types/index.ts
+export interface BlogPost {
+  url: string;
+  frontmatter: {
+    title: string;
+    description: string;
+    pubDate: string;
+    readingTime: string;
+  };
+}
+```
+
+<Note>
+  While the interface shows the expected structure, blog posts are typically created as Markdown files with frontmatter. The interface represents how they're consumed by the application.
+</Note>
+
+## Frontmatter Fields
+
+<ParamField path="title" type="string" required>
+  The title of your blog post. This appears as the main heading and in meta tags.
+</ParamField>
+
+<ParamField path="description" type="string" required>
+  A brief summary of the post content. Used for previews and SEO.
+</ParamField>
+
+<ParamField path="pubDate" type="string" required>
+  The publication date in ISO 8601 format (e.g., `"2024-03-15"` or `"2024-03-15T10:30:00Z"`).
+</ParamField>
+
+<ParamField path="readingTime" type="string" required>
+  Estimated reading time (e.g., `"5 min read"`, `"10 min read"`).
+</ParamField>
+
+## Creating a Blog Post
+
+Blog posts are typically stored in a content directory and written in Markdown format.
+
+### Basic Template
+
+```markdown
+---
+title: "Your Blog Post Title"
+description: "A compelling description of your post that will appear in previews"
+pubDate: "2024-03-15"
+readingTime: "5 min read"
+---
+
+## Introduction
+
+Your blog post content starts here...
+
+## Main Content
+
+Continue with your main content.
+
+### Subsections
+
+You can use standard Markdown formatting:
+
+- Lists
+- **Bold text**
+- *Italic text*
+- [Links](https://example.com)
+- Code blocks
+
+```typescript
+const example = "code";
+```
+
+## Conclusion
+
+Wrap up your post.
+```
+
+## Frontmatter Examples
+
+### Basic Post
+
+```yaml
+---
+title: "Getting Started with TypeScript"
+description: "Learn the fundamentals of TypeScript and why it's essential for modern JavaScript development"
+pubDate: "2024-03-15"
+readingTime: "5 min read"
+---
+```
+
+### Technical Tutorial
+
+```yaml
+---
+title: "Building a REST API with Node.js"
+description: "A comprehensive guide to creating a production-ready REST API using Node.js, Express, and TypeScript"
+pubDate: "2024-03-20T14:30:00Z"
+readingTime: "12 min read"
+---
+```
+
+### Short Post
+
+```yaml
+---
+title: "Quick Tip: Git Aliases"
+description: "Save time with these essential Git aliases for your daily workflow"
+pubDate: "2024-03-10"
+readingTime: "2 min read"
+---
+```
+
+## Calculating Reading Time
+
+Reading time is typically calculated based on word count:
+
+- **Average reading speed**: 200-250 words per minute
+- **Formula**: `Math.ceil(wordCount / 200)` minutes
+
+### Reading Time Examples
+
+| Word Count | Reading Time |
+|------------|-------------|
+| 0 - 400    | "2 min read" |
+| 401 - 600  | "3 min read" |
+| 601 - 1000 | "5 min read" |
+| 1001 - 2000| "8 min read" |
+| 2001+      | "10+ min read" |
+
+<Note>
+  You can calculate reading time manually or use a tool like [reading-time](https://www.npmjs.com/package/reading-time) in your build process.
+</Note>
+
+## Markdown Best Practices
+
+### Code Blocks
+
+Use fenced code blocks with language identifiers:
+
+````markdown
+```typescript
+interface User {
+  name: string;
+  email: string;
+}
+```
+````
+
+### Headings
+
+Use proper heading hierarchy:
+
+```markdown
+## Main Section (h2)
+
+### Subsection (h3)
+
+#### Detail (h4)
+```
+
+### Links
+
+Use descriptive link text:
+
+```markdown
+✅ Check out the [TypeScript documentation](https://www.typescriptlang.org/docs/)
+❌ Click [here](https://www.typescriptlang.org/docs/) for documentation
+```
+
+### Images
+
+```markdown
+![Alt text describing the image](/path/to/image.png)
+```
+
+## File Organization
+
+Typical blog post structure:
+
+```
+src/
+└── content/
+    └── blog/
+        ├── getting-started-typescript.md
+        ├── building-rest-api.md
+        └── git-aliases.md
+```
+
+### Naming Conventions
+
+- Use kebab-case for filenames: `my-blog-post.md`
+- Keep filenames descriptive and URL-friendly
+- Avoid special characters and spaces
+- Use `.md` or `.mdx` extension
+
+## Complete Example
+
+Here's a complete blog post example:
+
+```markdown
+---
+title: "Understanding JavaScript Closures"
+description: "A deep dive into closures in JavaScript, with practical examples and common use cases"
+pubDate: "2024-03-15T10:00:00Z"
+readingTime: "7 min read"
+---
+
+## What are Closures?
+
+Closures are one of the most powerful features in JavaScript. A closure is created when a function is defined inside another function, allowing the inner function to access variables from the outer function's scope.
+
+## Why Closures Matter
+
+Closures enable:
+
+- **Data privacy**: Create private variables that can't be accessed from outside
+- **Partial application**: Pre-configure functions with some arguments
+- **Callbacks**: Maintain state in asynchronous operations
+
+## Basic Example
+
+```javascript
+function createCounter() {
+  let count = 0;
+  
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getCount: () => count
+  };
+}
+
+const counter = createCounter();
+counter.increment(); // 1
+counter.increment(); // 2
+counter.getCount();  // 2
+```
+
+## Common Pitfalls
+
+### Loop Variables
+
+Be careful when creating closures in loops:
+
+```javascript
+// ❌ Wrong
+for (var i = 0; i < 5; i++) {
+  setTimeout(() => console.log(i), 100); // Prints 5 five times
+}
+
+// ✅ Correct
+for (let i = 0; i < 5; i++) {
+  setTimeout(() => console.log(i), 100); // Prints 0, 1, 2, 3, 4
+}
+```
+
+## Conclusion
+
+Closures are essential for writing clean, maintainable JavaScript code. Master them to unlock powerful programming patterns.
+```
+
+## Publishing Workflow
+
+1. **Create** the markdown file in your content directory
+2. **Write** your content with proper frontmatter
+3. **Calculate** reading time based on word count
+4. **Preview** locally to ensure formatting is correct
+5. **Commit** and push to deploy (if using CI/CD)
+
+## Best Practices
+
+- Write descriptive titles that clearly indicate the post's content
+- Keep descriptions concise (under 160 characters for SEO)
+- Use ISO 8601 date format for consistency
+- Be realistic with reading time estimates
+- Use proper Markdown syntax for better rendering
+- Include code examples with syntax highlighting
+- Break up long content with headings and subheadings
+- Proofread before publishing

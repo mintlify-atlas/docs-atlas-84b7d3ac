@@ -1,0 +1,378 @@
+---
+title: Build Configuration
+description: Understanding the build settings, optimization, and configuration for the Astro portfolio
+---
+
+This guide covers the build configuration, optimization settings, and how to customize the Astro portfolio for your needs.
+
+## Astro Configuration
+
+The portfolio uses `astro.config.mjs` for all build and site configuration.
+
+### Configuration File
+
+<CodeGroup>
+```js astro.config.mjs
+import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
+import icon from "astro-icon";
+
+const base = "https://aviv.sh";
+
+export default defineConfig({
+  site: base,
+  integrations: [icon(), sitemap()],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+</CodeGroup>
+
+### Configuration Options Explained
+
+**`site`** - The base URL of your deployed site
+- Used for generating absolute URLs in sitemaps and meta tags
+- Format: `https://yourdomain.com` (include protocol, no trailing slash)
+- Critical for SEO and social media sharing
+
+**`integrations`** - Astro integrations that extend functionality
+- `icon()`: Enables the astro-icon integration for icon support
+- `sitemap()`: Automatically generates sitemap.xml for SEO
+
+**`vite.plugins`** - Vite plugins for the build process
+- `tailwindcss()`: Processes Tailwind CSS styles via Vite (TailwindCSS v4)
+
+<Note>
+This portfolio uses TailwindCSS v4 which integrates as a Vite plugin instead of PostCSS, providing better performance and simpler configuration.
+</Note>
+
+## Build Process
+
+The build process is defined in `package.json` and executed by the GitHub Actions workflow.
+
+### Build Scripts
+
+```json package.json
+{
+  "scripts": {
+    "build": "astro build",
+    "dev": "astro dev",
+    "preview": "astro preview",
+    "check:types": "tsc --noEmit"
+  }
+}
+```
+
+**Available commands:**
+
+- `npm run build` - Builds the production site to `dist/`
+- `npm run dev` - Starts development server (usually on port 4321)
+- `npm run preview` - Previews the production build locally
+- `npm run check:types` - Type-checks TypeScript without emitting files
+
+### Build Output
+
+When you run `astro build`, Astro:
+
+<Steps>
+  <Step title="Compiles components">
+    Processes all `.astro`, `.tsx`, `.jsx`, and `.md` files into static HTML
+  </Step>
+
+  <Step title="Processes styles">
+    - Compiles TailwindCSS via Vite plugin
+    - Minifies CSS for production
+    - Generates optimized stylesheets
+  </Step>
+
+  <Step title="Optimizes assets">
+    - Bundles and minifies JavaScript
+    - Optimizes images (if image optimization is configured)
+    - Generates content hashes for cache busting
+  </Step>
+
+  <Step title="Generates sitemap">
+    Creates `sitemap-index.xml` using the `@astrojs/sitemap` integration
+  </Step>
+
+  <Step title="Outputs to dist/">
+    All production files are placed in the `dist/` directory, ready for deployment
+  </Step>
+</Steps>
+
+## Integrations
+
+The portfolio uses several Astro integrations to enhance functionality.
+
+### Icon Integration
+
+```js
+import icon from "astro-icon";
+```
+
+**Purpose:** Provides icon support throughout the site
+
+**Icon sets used:**
+- `@iconify-json/mdi` - Material Design Icons
+- `@iconify-json/simple-icons` - Brand and logo icons
+
+**Usage in components:**
+```astro
+<Icon name="mdi:github" />
+<Icon name="simple-icons:linkedin" />
+```
+
+### Sitemap Integration
+
+```js
+import sitemap from "@astrojs/sitemap";
+```
+
+**Purpose:** Automatically generates XML sitemaps for search engines
+
+**Features:**
+- Generates `sitemap-index.xml` at build time
+- Uses the `site` configuration for absolute URLs
+- Includes all static pages automatically
+- Helps with SEO and search engine discoverability
+
+**Accessing the sitemap:**
+```
+https://aviv.sh/sitemap-index.xml
+```
+
+## TailwindCSS Configuration
+
+The portfolio uses TailwindCSS v4, which has a simpler configuration approach.
+
+### Integration Method
+
+Tailwind is integrated as a Vite plugin:
+
+```js astro.config.mjs
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+<Note>
+Unlike TailwindCSS v3, version 4 does not require a separate `tailwind.config.js` file. Configuration is handled through CSS and the Vite plugin.
+</Note>
+
+### Dependencies
+
+Tailwind-related packages:
+
+```json
+{
+  "dependencies": {
+    "@tailwindcss/vite": "4.1.12",
+    "tailwindcss": "4.1.12"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "0.5.16"
+  }
+}
+```
+
+## Build Optimization
+
+### Performance Optimizations
+
+The build includes several automatic optimizations:
+
+- **Static Site Generation (SSG)**: All pages are pre-rendered at build time
+- **Code splitting**: JavaScript is automatically split for optimal loading
+- **CSS minification**: Styles are minified and optimized
+- **Asset hashing**: Cache-busting hashes for all assets
+- **Tree shaking**: Unused code is removed from bundles
+
+### SEO Optimizations
+
+**Sitemap generation:**
+- Automatically created via `@astrojs/sitemap`
+- Uses correct absolute URLs from `site` config
+- Updates on every build
+
+**Meta tags:**
+- Uses `astro-seo` package for SEO meta tags (installed as dependency)
+- Supports Open Graph and Twitter Card tags
+- Configurable per page
+
+## Customizing the Build
+
+### Changing the Site URL
+
+Update the `base` constant in `astro.config.mjs`:
+
+```js astro.config.mjs
+const base = "https://yourdomain.com"; // Change this
+
+export default defineConfig({
+  site: base,
+  // ...
+});
+```
+
+<Warning>
+Always include `https://` in the site URL. Never include a trailing slash.
+</Warning>
+
+### Adding Output Options
+
+For deploying to platforms other than GitHub Pages, you may need an adapter:
+
+```js astro.config.mjs
+import node from '@astrojs/node';
+
+export default defineConfig({
+  output: 'server', // or 'hybrid'
+  adapter: node({
+    mode: 'standalone'
+  }),
+  // ...
+});
+```
+
+<Note>
+The current configuration uses the default `static` output mode, which is perfect for GitHub Pages deployment.
+</Note>
+
+### Adding Base Path
+
+If deploying to a subdirectory (e.g., `https://username.github.io/portfolio/`):
+
+```js astro.config.mjs
+export default defineConfig({
+  site: 'https://username.github.io',
+  base: '/portfolio',
+  // ...
+});
+```
+
+## Environment Variables
+
+<Note>
+The current portfolio does not use any environment variables. However, if you need to add them, here's how:
+</Note>
+
+### Adding Environment Variables
+
+Create a `.env` file in the repository root:
+
+```bash .env
+PUBLIC_API_URL=https://api.example.com
+SECRET_KEY=your-secret-key
+```
+
+**Important rules:**
+- Variables prefixed with `PUBLIC_` are exposed to client-side code
+- Variables without `PUBLIC_` are only available server-side
+- Never commit `.env` files to version control
+
+### Using in Code
+
+```astro
+---
+const apiUrl = import.meta.env.PUBLIC_API_URL;
+const secret = import.meta.env.SECRET_KEY; // Only available server-side
+---
+
+<div>{apiUrl}</div>
+```
+
+### GitHub Actions Secrets
+
+For environment variables in CI/CD:
+
+<Steps>
+  <Step title="Add repository secret">
+    Go to **Settings** > **Secrets and variables** > **Actions** > **New repository secret**
+  </Step>
+
+  <Step title="Update workflow">
+    ```yaml .github/workflows/deploy.yml
+    - name: Build site
+      env:
+        PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
+      run: npm run build
+    ```
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+### Build Fails Locally
+
+<Warning>
+Always test your build locally before pushing to ensure it works in CI/CD.
+</Warning>
+
+**Steps to debug:**
+
+1. **Clear cache and reinstall dependencies:**
+   ```bash
+   rm -rf node_modules dist .astro
+   npm install
+   npm run build
+   ```
+
+2. **Check for TypeScript errors:**
+   ```bash
+   npm run check:types
+   ```
+
+3. **Run linter:**
+   ```bash
+   npm run lint
+   ```
+
+### Sitemap Not Generating
+
+**Check these items:**
+
+1. `@astrojs/sitemap` is installed and listed in integrations
+2. `site` config is set in `astro.config.mjs`
+3. Build completed successfully
+4. Check `dist/sitemap-index.xml` after building
+
+### Styles Not Applying
+
+**TailwindCSS v4 troubleshooting:**
+
+1. Verify `@tailwindcss/vite` is in vite.plugins
+2. Check that Tailwind directives are in your CSS file
+3. Ensure class names are correct and not purged
+4. Clear build cache: `rm -rf .astro dist`
+
+### Build Works Locally But Fails in CI
+
+**Common causes:**
+
+1. **Different Node versions:** Check Node version in workflow vs local
+2. **Missing dependencies:** Ensure all deps are in `package.json`, not installed globally
+3. **Case-sensitive imports:** Linux (CI) is case-sensitive, macOS/Windows are not
+4. **Environment variables:** May be missing in CI environment
+
+**Debug steps:**
+
+```bash
+# Check Node version
+node --version
+
+# Clean install
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+<Note>
+The GitHub Actions workflow uses the latest Ubuntu runner and automatically installs the correct Node version based on your project configuration.
+</Note>

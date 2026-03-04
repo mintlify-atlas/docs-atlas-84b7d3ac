@@ -1,0 +1,388 @@
+---
+title: "Installation"
+description: "Detailed installation instructions and system requirements for Aviv Keller's portfolio"
+---
+
+This guide covers everything you need to know to install and set up the portfolio website on your local machine.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+### Node.js (Required)
+
+The portfolio requires **Node.js 18 or higher**.
+
+<Tabs>
+  <Tab title="Check your version">
+    ```bash
+    node --version
+    ```
+    
+    You should see output like `v18.0.0` or higher.
+  </Tab>
+  
+  <Tab title="Install Node.js">
+    Download and install Node.js from [nodejs.org](https://nodejs.org/).
+    
+    We recommend using the LTS (Long Term Support) version.
+  </Tab>
+  
+  <Tab title="Using a version manager">
+    If you work with multiple Node.js versions, consider using:
+    
+    - **nvm** (Node Version Manager): [github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm)
+    - **fnm** (Fast Node Manager): [github.com/Schniz/fnm](https://github.com/Schniz/fnm)
+    
+    ```bash nvm
+    nvm install 18
+    nvm use 18
+    ```
+  </Tab>
+</Tabs>
+
+### Package Manager (Choose One)
+
+You'll need a package manager to install dependencies. The project works with:
+
+- **npm** (comes with Node.js)
+- **yarn** - Install with `npm install -g yarn`
+- **pnpm** - Install with `npm install -g pnpm`
+
+### Git (Required)
+
+You'll need Git to clone the repository:
+
+```bash
+git --version
+```
+
+If you don't have Git installed, download it from [git-scm.com](https://git-scm.com/).
+
+## System Requirements
+
+<Note>
+  The portfolio is a lightweight Astro application with minimal system requirements.
+</Note>
+
+| Requirement | Minimum | Recommended |
+|-------------|---------|-------------|
+| **Node.js** | v18.0.0 | v20.0.0+ |
+| **RAM** | 2 GB | 4 GB+ |
+| **Storage** | 500 MB | 1 GB+ |
+| **OS** | macOS, Linux, Windows | Any |
+
+## Installation Steps
+
+<Steps>
+  <Step title="Clone the repository">
+    Open your terminal and run:
+
+    ```bash
+    git clone https://github.com/avivkeller/avivkeller.github.io.git
+    cd avivkeller.github.io
+    ```
+
+    <Tip>
+      If you plan to customize the portfolio for your own use, consider forking the repository first on GitHub.
+    </Tip>
+  </Step>
+
+  <Step title="Install dependencies">
+    Install all required packages:
+
+    <CodeGroup>
+    ```bash npm
+    npm install
+    ```
+
+    ```bash yarn
+    yarn install
+    ```
+
+    ```bash pnpm
+    pnpm install
+    ```
+    </CodeGroup>
+
+    This will install the following key dependencies:
+
+    ```json package.json
+    {
+      "dependencies": {
+        "@astrojs/sitemap": "3.5.1",
+        "@tailwindcss/vite": "4.1.12",
+        "astro": "5.13.4",
+        "astro-icon": "1.1.5",
+        "astro-seo": "0.8.4",
+        "tailwindcss": "4.1.12"
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Verify installation">
+    Confirm everything is installed correctly by running:
+
+    <CodeGroup>
+    ```bash npm
+    npm run dev
+    ```
+
+    ```bash yarn
+    yarn dev
+    ```
+
+    ```bash pnpm
+    pnpm dev
+    ```
+    </CodeGroup>
+
+    You should see output similar to:
+
+    ```
+    🚀 astro v5.13.4 started in 123ms
+
+    ┃ Local    http://localhost:4321/
+    ┃ Network  use --host to expose
+    ```
+
+    Open `http://localhost:4321` in your browser to view the site.
+  </Step>
+
+  <Step title="Optional: Run type checking">
+    Verify TypeScript types are correct:
+
+    <CodeGroup>
+    ```bash npm
+    npm run check:types
+    ```
+
+    ```bash yarn
+    yarn check:types
+    ```
+
+    ```bash pnpm
+    pnpm check:types
+    ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Optional: Run linting">
+    Check code quality with ESLint:
+
+    <CodeGroup>
+    ```bash npm
+    npm run lint
+    ```
+
+    ```bash yarn
+    yarn lint
+    ```
+
+    ```bash pnpm
+    pnpm lint
+    ```
+    </CodeGroup>
+
+    To automatically fix issues:
+
+    <CodeGroup>
+    ```bash npm
+    npm run lint:fix
+    ```
+
+    ```bash yarn
+    yarn lint:fix
+    ```
+
+    ```bash pnpm
+    pnpm lint:fix
+    ```
+    </CodeGroup>
+  </Step>
+</Steps>
+
+## Project Structure
+
+After installation, you'll have this structure:
+
+```
+avivkeller.github.io/
+├── public/                 # Static assets
+│   ├── favicon.ico
+│   ├── robots.txt
+│   └── assets/
+├── src/
+│   ├── assets/            # Images and media
+│   ├── components/        # Astro components
+│   │   ├── cards/        # Card components
+│   │   ├── common/       # Shared components
+│   │   ├── navigation/   # Header and Footer
+│   │   ├── sections/     # Page sections
+│   │   └── ui/           # UI elements
+│   ├── data/             # Content data files
+│   │   ├── index.ts      # Site config & social links
+│   │   ├── projects.ts   # Projects data
+│   │   ├── achievements.ts
+│   │   └── experience.ts
+│   ├── layouts/          # Page layouts
+│   ├── pages/            # Route pages
+│   ├── styles/           # Global CSS
+│   └── types/            # TypeScript types
+├── astro.config.mjs      # Astro configuration
+├── tailwind.config.mjs   # Tailwind configuration
+├── tsconfig.json         # TypeScript configuration
+└── package.json          # Dependencies
+```
+
+## Available Scripts
+
+The `package.json` defines these npm scripts:
+
+| Script | Command | Description |
+|--------|---------|-------------|
+| **dev** | `npm run dev` | Start development server |
+| **build** | `npm run build` | Build for production |
+| **preview** | `npm run preview` | Preview production build |
+| **check:types** | `npm run check:types` | Run TypeScript type checking |
+| **lint** | `npm run lint` | Run ESLint |
+| **lint:fix** | `npm run lint:fix` | Auto-fix ESLint issues |
+| **format:check** | `npm run format:check` | Check code formatting |
+| **format:write** | `npm run format:write` | Auto-format code |
+
+## Troubleshooting
+
+### Port already in use
+
+If port 4321 is already in use:
+
+```bash
+npm run dev -- --port 3000
+```
+
+This will start the server on port 3000 instead.
+
+### Node version issues
+
+<Warning>
+  If you see errors about Node.js compatibility, ensure you're using Node.js 18 or higher.
+</Warning>
+
+```bash
+node --version
+```
+
+If your version is below 18, upgrade Node.js:
+
+- **Using nvm**: `nvm install 18 && nvm use 18`
+- **Direct download**: Visit [nodejs.org](https://nodejs.org/)
+
+### Module resolution errors
+
+If you encounter module resolution errors:
+
+1. Delete the `node_modules` folder:
+   ```bash
+   rm -rf node_modules
+   ```
+
+2. Delete the lock file:
+   ```bash
+   rm package-lock.json  # or yarn.lock / pnpm-lock.yaml
+   ```
+
+3. Reinstall dependencies:
+   ```bash
+   npm install
+   ```
+
+### Build errors with TailwindCSS
+
+This project uses **Tailwind CSS v4**. If you see Tailwind-related errors:
+
+1. Ensure you have the correct version:
+   ```bash
+   npm list tailwindcss
+   ```
+   Should show version 4.1.12 or higher.
+
+2. Clear the Astro cache:
+   ```bash
+   rm -rf .astro
+   ```
+
+3. Rebuild:
+   ```bash
+   npm run build
+   ```
+
+### Permission errors on Windows
+
+<Tip>
+  On Windows, you may need to run your terminal as Administrator for some npm operations.
+</Tip>
+
+Alternatively, configure npm to use a different directory:
+
+```bash
+npm config set prefix "C:\Users\YourUsername\AppData\Roaming\npm"
+```
+
+## Environment Variables
+
+This portfolio doesn't require environment variables by default. However, if you plan to add features like analytics or contact forms, create a `.env` file:
+
+```bash .env
+# Example environment variables
+PUBLIC_SITE_URL=https://your-domain.com
+PUBLIC_GA_ID=your-google-analytics-id
+```
+
+<Note>
+  Variables prefixed with `PUBLIC_` are exposed to the client-side code in Astro.
+</Note>
+
+## IDE Setup
+
+For the best development experience:
+
+### VS Code (Recommended)
+
+Install these extensions:
+
+1. **Astro** - Official Astro language support
+2. **Tailwind CSS IntelliSense** - Tailwind class autocompletion
+3. **ESLint** - JavaScript/TypeScript linting
+4. **Prettier** - Code formatting
+
+The project includes a `.vscode/extensions.json` file that will prompt you to install recommended extensions.
+
+### Other IDEs
+
+For other editors, ensure you have:
+- Syntax highlighting for `.astro` files
+- TypeScript support
+- ESLint integration
+
+## Next Steps
+
+Now that installation is complete:
+
+<CardGroup cols={2}>
+  <Card title="Quickstart Guide" icon="rocket" href="/quickstart">
+    Follow the quickstart to customize your portfolio.
+  </Card>
+
+  <Card title="Project Structure" icon="folder-tree" href="/reference/project-structure">
+    Learn about the codebase organization.
+  </Card>
+
+  <Card title="Add Projects" icon="code" href="/content/projects">
+    Start adding your own projects to the portfolio.
+  </Card>
+
+  <Card title="Customize Styling" icon="paintbrush" href="/customization/styling">
+    Make the design your own with custom styles.
+  </Card>
+</CardGroup>

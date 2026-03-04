@@ -1,0 +1,476 @@
+---
+title: UI Elements
+description: Reusable UI primitives including buttons, badges, cards, icons, sections, and more
+---
+
+## Overview
+
+UI components are the building blocks of the portfolio. They're located in `src/components/ui/` and provide consistent styling across the site.
+
+## Button
+
+A versatile button component with multiple variants and sizes.
+
+### Props
+
+<ParamField path="variant" type="string" default="primary">
+  Button style variant:
+  - `"primary"` - Red gradient background
+  - `"secondary"` - White background with border
+  - `"outline"` - Red border with transparent background
+  - `"ghost"` - No background, text only
+</ParamField>
+
+<ParamField path="size" type="string" default="md">
+  Button size:
+  - `"sm"` - Small (px-4 py-2)
+  - `"md"` - Medium (px-6 py-3)
+  - `"lg"` - Large (px-8 py-4)
+  - `"xl"` - Extra large (px-10 py-5)
+</ParamField>
+
+<ParamField path="href" type="string">
+  If provided, renders as an `<a>` tag instead of `<button>`
+</ParamField>
+
+<ParamField path="target" type="string" default="_self">
+  Link target (only used when `href` is provided)
+</ParamField>
+
+<ParamField path="class" type="string">
+  Additional CSS classes
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro Button Variants
+<Button variant="primary" size="lg">
+  Primary Button
+</Button>
+
+<Button variant="secondary" size="md">
+  Secondary Button
+</Button>
+
+<Button variant="outline" size="md">
+  Outline Button
+</Button>
+
+<Button variant="ghost" size="sm">
+  Ghost Button
+</Button>
+```
+
+```astro With Icon
+import Icon from "../components/ui/Icon.astro";
+
+<Button href="/projects" size="lg">
+  View Projects
+  <Icon name="mdi:arrow-right" size={20} class="ml-2" />
+</Button>
+```
+
+```astro As Link
+<Button href="https://github.com" target="_blank" variant="primary">
+  Visit GitHub
+</Button>
+```
+</CodeGroup>
+
+### Styling
+
+Buttons include:
+- Rounded corners (`rounded-full`)
+- Scale animation on hover (`hover:scale-105`)
+- Smooth transitions (300ms)
+- Shadow effects
+
+## Badge
+
+Small labels for displaying categories, tags, or status.
+
+### Props
+
+<ParamField path="variant" type="string" default="primary">
+  Badge color variant:
+  - `"primary"` - Red badge
+  - `"secondary"` - Gray badge
+  - `"success"` - Green badge
+  - `"warning"` - Orange badge
+  - `"danger"` - Red badge
+</ParamField>
+
+<ParamField path="size" type="string" default="sm">
+  Badge size:
+  - `"xs"` - Extra small
+  - `"sm"` - Small
+  - `"md"` - Medium
+</ParamField>
+
+<ParamField path="class" type="string">
+  Additional CSS classes
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro Badge Variants
+<Badge variant="primary">Primary</Badge>
+<Badge variant="secondary">Secondary</Badge>
+<Badge variant="success">Success</Badge>
+<Badge variant="warning">Warning</Badge>
+<Badge variant="danger">Danger</Badge>
+```
+
+```astro Technology Tags
+{project.technologies.map((tech) => (
+  <Badge variant="primary">{tech}</Badge>
+))}
+```
+
+```astro With Icon
+<Badge variant="success" class="flex items-center gap-1">
+  <Icon name="mdi:check" size={14} />
+  Verified
+</Badge>
+```
+</CodeGroup>
+
+### Styling
+
+Badges feature:
+- Rounded pill shape (`rounded-full`)
+- Medium font weight
+- Compact padding
+- Background and text color coordination
+
+## Card
+
+A flexible container component with hover effects.
+
+### Props
+
+<ParamField path="href" type="string">
+  If provided, renders as clickable link
+</ParamField>
+
+<ParamField path="target" type="string" default="_self">
+  Link target (only used when `href` is provided)
+</ParamField>
+
+<ParamField path="variant" type="string" default="default">
+  Card style variant:
+  - `"default"` - White background with shadow
+  - `"flat"` - White background with border
+</ParamField>
+
+<ParamField path="class" type="string">
+  Additional CSS classes
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro Basic Card
+<Card class="p-6">
+  <h3>Card Title</h3>
+  <p>Card content goes here</p>
+</Card>
+```
+
+```astro Clickable Card
+<Card href="/projects" class="p-8">
+  <h3>View Projects</h3>
+  <p>Check out my latest work</p>
+</Card>
+```
+
+```astro Flat Variant
+<Card variant="flat" class="p-6">
+  <p>Card with border instead of shadow</p>
+</Card>
+```
+</CodeGroup>
+
+### Features
+
+- Lift animation on hover (`hover:-translate-y-1`)
+- Shadow enhancement on hover
+- Smooth transitions (300ms)
+- Rounded corners (`rounded-2xl`)
+
+## Icon
+
+Wrapper for Iconify icons with consistent sizing.
+
+### Props
+
+<ParamField path="name" type="string" required>
+  Iconify icon name (e.g., `"mdi:github"`, `"mdi:arrow-right"`)
+</ParamField>
+
+<ParamField path="size" type="number" default={24}>
+  Icon size in pixels
+</ParamField>
+
+<ParamField path="class" type="string">
+  Additional CSS classes
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro Basic Icon
+<Icon name="mdi:github" size={24} />
+```
+
+```astro With Color
+<Icon name="mdi:heart" size={20} class="text-red-500" />
+```
+
+```astro In Button
+<Button>
+  <Icon name="mdi:email" size={20} class="mr-2" />
+  Contact Me
+</Button>
+```
+</CodeGroup>
+
+### Icon Libraries
+
+The portfolio uses Material Design Icons (MDI) via Iconify:
+- Browse icons at [Iconify Icon Sets](https://icon-sets.iconify.design/mdi/)
+- Prefix: `mdi:` (e.g., `mdi:github`, `mdi:calendar`)
+
+## Section
+
+A full-width section container with consistent spacing.
+
+### Props
+
+<ParamField path="background" type="string" default="bg-white">
+  Background color class (e.g., `"bg-white"`, `"bg-red-50"`, `"bg-gradient-to-r from-red-500 to-red-700"`)
+</ParamField>
+
+<ParamField path="padding" type="string" default="py-20">
+  Vertical padding class
+</ParamField>
+
+<ParamField path="class" type="string">
+  Additional CSS classes
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro Basic Section
+<Section background="bg-white" id="projects">
+  <h2>My Projects</h2>
+  <!-- Content -->
+</Section>
+```
+
+```astro Colored Background
+<Section background="bg-red-50">
+  <h2>Experience</h2>
+  <!-- Content -->
+</Section>
+```
+
+```astro Gradient Background
+<Section 
+  background="bg-gradient-to-r from-red-500 to-red-700"
+  class="text-white"
+>
+  <h2>Call to Action</h2>
+</Section>
+```
+</CodeGroup>
+
+### Features
+
+- Automatic container with max-width
+- Horizontal padding (`px-4`)
+- Centered content
+- Full-width backgrounds
+
+## SectionHeader
+
+A centered section title with optional subtitle.
+
+### Props
+
+<ParamField path="title" type="string" required>
+  Section title
+</ParamField>
+
+<ParamField path="subtitle" type="string">
+  Optional subtitle text
+</ParamField>
+
+<ParamField path="class" type="string">
+  Additional CSS classes
+</ParamField>
+
+### Usage
+
+<CodeGroup>
+```astro With Title Only
+<SectionHeader title="My Projects" />
+```
+
+```astro With Subtitle
+<SectionHeader
+  title="Featured Projects"
+  subtitle="Innovative solutions and tools that make a difference"
+/>
+```
+
+```astro In Section
+<Section background="bg-white">
+  <SectionHeader
+    title="Professional Experience"
+    subtitle="Contributing to open source and building impactful software"
+  />
+  <!-- Section content -->
+</Section>
+```
+</CodeGroup>
+
+### Styling
+
+- Centered text alignment
+- Large title (4xl-5xl responsive)
+- Red color for title (`text-red-700`)
+- Gray subtitle (`text-gray-600`)
+- Max-width subtitle (2xl)
+- Bottom margin (`mb-16`)
+
+## StatCard
+
+Displays a statistic with an icon, value, and label.
+
+### Props
+
+<ParamField path="icon" type="string" required>
+  Iconify icon name
+</ParamField>
+
+<ParamField path="value" type="string | number" required>
+  The statistic value (e.g., "50+", "1000")
+</ParamField>
+
+<ParamField path="label" type="string" required>
+  Description of the statistic
+</ParamField>
+
+### Usage
+
+```astro
+<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+  <StatCard
+    icon="mdi:code-braces"
+    value="50+"
+    label="Projects Completed"
+  />
+  
+  <StatCard
+    icon="mdi:github"
+    value="1000+"
+    label="GitHub Contributions"
+  />
+  
+  <StatCard
+    icon="mdi:star"
+    value="100+"
+    label="Stars Earned"
+  />
+</div>
+```
+
+### Features
+
+- Circular icon background with gradient
+- Large value display
+- Hover shadow effect
+- Centered layout
+
+## Timeline
+
+Displays items in a vertical timeline with a gradient line.
+
+### Props
+
+<ParamField path="items" type="array" required>
+  Array of timeline items
+</ParamField>
+
+### Usage
+
+```astro
+---
+const timelineItems = [
+  { date: "2024", title: "Senior Developer", company: "Tech Corp" },
+  { date: "2022", title: "Developer", company: "Startup Inc" },
+];
+---
+
+<Timeline items={timelineItems}>
+  <div slot="item" slot-scope="{ item }">
+    <div class="rounded-lg bg-white p-6 shadow-lg">
+      <div class="mb-2 text-sm text-gray-500">{item.date}</div>
+      <h3 class="text-xl font-bold">{item.title}</h3>
+      <p class="text-gray-600">{item.company}</p>
+    </div>
+  </div>
+</Timeline>
+```
+
+### Features
+
+- Gradient timeline line (blue to pink)
+- Circular markers at each item
+- Named slot for custom item rendering
+- Responsive spacing
+
+## Common Patterns
+
+### Combining Components
+
+```astro
+<Section background="bg-white">
+  <SectionHeader
+    title="My Work"
+    subtitle="Projects and contributions"
+  />
+  
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+    <Card class="p-6">
+      <Icon name="mdi:code" size={48} class="mb-4 text-red-600" />
+      <h3 class="mb-2 text-xl font-bold">Development</h3>
+      <p class="text-gray-600">Building modern web applications</p>
+      <Badge variant="primary" class="mt-4">Active</Badge>
+    </Card>
+  </div>
+  
+  <div class="mt-12 text-center">
+    <Button href="/projects" size="lg" variant="primary">
+      View All Projects
+      <Icon name="mdi:arrow-right" size={20} class="ml-2" />
+    </Button>
+  </div>
+</Section>
+```
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="Card Components" icon="id-card" href="/components/cards">
+    Specialized cards using these UI primitives
+  </Card>
+  
+  <Card title="Sections" icon="layout" href="/components/sections">
+    Full-page section components
+  </Card>
+</CardGroup>

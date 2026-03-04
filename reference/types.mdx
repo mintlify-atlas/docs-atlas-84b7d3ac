@@ -1,0 +1,433 @@
+---
+title: "Type Reference"
+description: "Complete TypeScript interface documentation for Aviv Keller's portfolio website type system"
+---
+
+## Overview
+
+All TypeScript interfaces are defined in `src/types/index.ts`. This document provides comprehensive documentation for each interface and its fields.
+
+## Core Types
+
+### SocialLink
+
+Represents a social media profile link with icon and accessibility information.
+
+**Source:** `src/types/index.ts:3-8`
+
+<ResponseField name="href" type="string" required>
+  The URL to the social media profile or contact method.
+
+  **Examples:**
+  - `"https://github.com/avivkeller"`
+  - `"https://linkedin.com/in/avivkeller"`
+  - `"mailto:me@aviv.sh"`
+</ResponseField>
+
+<ResponseField name="icon" type="string" required>
+  The icon identifier used with astro-icon library.
+
+  **Format:** `{collection}:{icon-name}`
+
+  **Examples:**
+  - `"simple-icons:github"`
+  - `"simple-icons:linkedin"`
+  - `"mdi:email"`
+</ResponseField>
+
+<ResponseField name="label" type="string" required>
+  Human-readable label for the link, used for accessibility and display.
+
+  **Examples:**
+  - `"GitHub"`
+  - `"LinkedIn"`
+  - `"Email"`
+</ResponseField>
+
+<ResponseField name="rel" type="string">
+  Optional relationship attribute for the link (e.g., `"noopener"`, `"noreferrer"`).
+</ResponseField>
+
+**Usage Example:**
+
+```typescript
+const socialLink: SocialLink = {
+  href: "https://github.com/avivkeller",
+  icon: "simple-icons:github",
+  label: "GitHub"
+};
+```
+
+---
+
+### Project
+
+Represents a portfolio project with metadata, links, and technology stack.
+
+**Source:** `src/types/index.ts:10-17`
+
+<ResponseField name="title" type="string" required>
+  The project name or title.
+
+  **Examples:**
+  - `"Termview"`
+  - `"Keyframed"`
+  - `"Node.js Core"`
+</ResponseField>
+
+<ResponseField name="description" type="string" required>
+  A brief description of the project, its purpose, and key features.
+
+  **Example:**
+  ```
+  "A terminal-based image viewer with support for multiple formats"
+  ```
+</ResponseField>
+
+<ResponseField name="image" type="ImageMetadata">
+  Optional project thumbnail or logo image imported from the assets directory.
+
+  **Type:** Astro's `ImageMetadata` type for optimized images
+
+  **Usage:**
+  ```typescript
+  import termviewLogo from "../assets/images/termview-logo.png";
+  
+  const project: Project = {
+    // ...
+    image: termviewLogo
+  };
+  ```
+</ResponseField>
+
+<ResponseField name="technologies" type="string[]">
+  Optional array of technologies, frameworks, or languages used in the project.
+
+  **Examples:**
+  ```typescript
+  ["TypeScript", "React", "Node.js"]
+  ["Python", "FastAPI", "PostgreSQL"]
+  ```
+</ResponseField>
+
+<ResponseField name="githubLink" type="string" required>
+  URL to the project's GitHub repository.
+
+  **Format:** `https://github.com/{username}/{repo}`
+
+  **Example:** `"https://github.com/avivkeller/termview"`
+</ResponseField>
+
+<ResponseField name="website" type="string">
+  Optional URL to the project's live website or demo.
+
+  **Examples:**
+  - `"https://example.com"`
+  - `"https://npm.im/package-name"`
+</ResponseField>
+
+**Usage Example:**
+
+```typescript
+import termviewLogo from "../assets/images/termview-logo.png";
+
+const project: Project = {
+  title: "Termview",
+  description: "A terminal-based image viewer",
+  image: termviewLogo,
+  technologies: ["Node.js", "TypeScript"],
+  githubLink: "https://github.com/avivkeller/termview",
+  website: "https://www.npmjs.com/package/termview"
+};
+```
+
+---
+
+### Achievement
+
+Represents an award, recognition, or notable accomplishment.
+
+**Source:** `src/types/index.ts:19-23`
+
+<ResponseField name="title" type="string" required>
+  The achievement title or description.
+
+  **Examples:**
+  - `"Node.js Contributor"`
+  - `"HackerOne Top 100"`
+  - `"Open Source Award 2024"`
+</ResponseField>
+
+<ResponseField name="icon" type="string">
+  Optional icon identifier for visual representation.
+
+  **Format:** `{collection}:{icon-name}`
+
+  **Examples:**
+  - `"simple-icons:nodejs"`
+  - `"mdi:trophy"`
+</ResponseField>
+
+<ResponseField name="url" type="string" required>
+  Link to more information about the achievement (profile, certificate, announcement, etc.).
+
+  **Examples:**
+  - `"https://github.com/nodejs/node"`
+  - `"https://hackerone.com/aviv_keller"`
+</ResponseField>
+
+**Usage Example:**
+
+```typescript
+const achievement: Achievement = {
+  title: "Node.js Core Contributor",
+  icon: "simple-icons:nodejs",
+  url: "https://github.com/nodejs/node/graphs/contributors"
+};
+```
+
+---
+
+### BlogPost
+
+Represents a blog post with frontmatter metadata.
+
+**Source:** `src/types/index.ts:25-33`
+
+<ResponseField name="url" type="string" required>
+  The relative or absolute URL to the blog post.
+
+  **Examples:**
+  - `"/blog/my-first-post"`
+  - `"https://blog.example.com/post"`
+</ResponseField>
+
+<ResponseField name="frontmatter" type="object" required>
+  Metadata extracted from the blog post's frontmatter.
+
+  <Expandable title="frontmatter fields">
+    <ResponseField name="title" type="string" required>
+      The blog post title.
+    </ResponseField>
+
+    <ResponseField name="description" type="string" required>
+      A brief summary or excerpt of the blog post.
+    </ResponseField>
+
+    <ResponseField name="pubDate" type="string" required>
+      Publication date in ISO 8601 format or human-readable format.
+
+      **Examples:**
+      - `"2024-03-15"`
+      - `"March 15, 2024"`
+    </ResponseField>
+
+    <ResponseField name="readingTime" type="string" required>
+      Estimated reading time for the post.
+
+      **Examples:**
+      - `"5 min read"`
+      - `"10 minutes"`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+**Usage Example:**
+
+```typescript
+const blogPost: BlogPost = {
+  url: "/blog/getting-started-with-astro",
+  frontmatter: {
+    title: "Getting Started with Astro",
+    description: "Learn how to build fast websites with Astro",
+    pubDate: "2024-03-15",
+    readingTime: "5 min read"
+  }
+};
+```
+
+---
+
+### NavigationItem
+
+Represents a navigation menu item.
+
+**Source:** `src/types/index.ts:35-39`
+
+<ResponseField name="href" type="string" required>
+  The URL or path for the navigation link.
+
+  **Examples:**
+  - `"/projects"`
+  - `"/about"`
+  - `"https://external-site.com"`
+</ResponseField>
+
+<ResponseField name="title" type="string" required>
+  The display text for the navigation item.
+
+  **Examples:**
+  - `"Projects"`
+  - `"About Me"`
+  - `"Contact"`
+</ResponseField>
+
+<ResponseField name="target" type="string">
+  Optional link target attribute for controlling how the link opens.
+
+  **Common values:**
+  - `"_blank"` - Opens in a new tab/window
+  - `"_self"` - Opens in the same frame (default)
+</ResponseField>
+
+**Usage Example:**
+
+```typescript
+const navItems: NavigationItem[] = [
+  { href: "/projects", title: "Projects" },
+  { href: "/blog", title: "Blog" },
+  { 
+    href: "https://github.com/avivkeller", 
+    title: "GitHub",
+    target: "_blank"
+  }
+];
+```
+
+---
+
+### Position
+
+Represents a job position within a work experience entry.
+
+**Source:** `src/types/index.ts:41-44`
+
+<ResponseField name="title" type="string" required>
+  The job title or role.
+
+  **Examples:**
+  - `"Software Engineer"`
+  - `"Senior Developer"`
+  - `"Technical Lead"`
+</ResponseField>
+
+<ResponseField name="duration" type="string" required>
+  The time period for this position.
+
+  **Format:** Flexible, human-readable format
+
+  **Examples:**
+  - `"Jan 2022 - Present"`
+  - `"2020 - 2022"`
+  - `"Summer 2021"`
+</ResponseField>
+
+**Usage Example:**
+
+```typescript
+const position: Position = {
+  title: "Senior Software Engineer",
+  duration: "Jan 2022 - Present"
+};
+```
+
+---
+
+### WorkExperience
+
+Represents a complete work experience entry with company information and positions held.
+
+**Source:** `src/types/index.ts:46-52`
+
+<ResponseField name="company" type="string" required>
+  The company or organization name.
+
+  **Examples:**
+  - `"Google"`
+  - `"NASA"`
+  - `"Acme Corporation"`
+</ResponseField>
+
+<ResponseField name="website" type="string" required>
+  URL to the company's website.
+
+  **Examples:**
+  - `"https://google.com"`
+  - `"https://nasa.gov"`
+</ResponseField>
+
+<ResponseField name="type" type="string" required>
+  The employment type.
+
+  **Allowed values:**
+  - `"full-time"` - Full-time employment
+  - `"part-time"` - Part-time employment
+  - `"contract"` - Contract or freelance work
+  - `"internship"` - Internship position
+  - `"volunteer"` - Volunteer work
+</ResponseField>
+
+<ResponseField name="positions" type="Position[]" required>
+  Array of positions held at this company, ordered chronologically (most recent first).
+
+  **Type:** Array of [Position](#position) objects
+
+  **Example:**
+  ```typescript
+  [
+    { title: "Senior Engineer", duration: "2023 - Present" },
+    { title: "Engineer", duration: "2021 - 2023" }
+  ]
+  ```
+</ResponseField>
+
+<ResponseField name="technologies" type="string[]">
+  Optional array of technologies used during this experience.
+
+  **Examples:**
+  ```typescript
+  ["React", "Node.js", "PostgreSQL"]
+  ["Python", "Django", "AWS"]
+  ```
+</ResponseField>
+
+**Usage Example:**
+
+```typescript
+const experience: WorkExperience = {
+  company: "NASA",
+  website: "https://nasa.gov",
+  type: "internship",
+  positions: [
+    {
+      title: "Software Engineering Intern",
+      duration: "Summer 2023"
+    }
+  ],
+  technologies: ["Python", "C++", "Machine Learning"]
+};
+```
+
+---
+
+## Type Unions
+
+### Employment Type
+
+The `WorkExperience.type` field uses a union of string literals:
+
+```typescript
+type EmploymentType = "full-time" | "part-time" | "contract" | "internship" | "volunteer";
+```
+
+## External Dependencies
+
+### ImageMetadata
+
+Imported from Astro for optimized image handling:
+
+```typescript
+import type { ImageMetadata } from "astro";
+```
+
+This type is used in the `Project.image` field and provides metadata about imported images including dimensions, format, and source path.

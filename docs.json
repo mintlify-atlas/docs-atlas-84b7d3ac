@@ -1,122 +1,84 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Aviv Keller Portfolio",
+  "theme": "palm",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#a1a1a2",
+    "light": "#1e1e1e",
+    "dark": "#e2e2e2"
   },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
+  "favicon": "/favicon.ico",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "https://media.brand.dev/e3750488-e69d-47ee-8065-35ece92007e2.webp",
+    "dark": "https://media.brand.dev/e3750488-e69d-47ee-8065-35ece92007e2.webp"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
     "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "type": "github",
+      "href": "https://github.com/avivkeller/avivkeller.github.io"
     }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/avivkeller/avivkeller.github.io",
+      "x": "https://x.com/aviv_keller",
+      "linkedin": "https://www.linkedin.com/in/avivkeller"
     }
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "introduction",
+          "quickstart",
+          "installation"
+        ]
+      },
+      {
+        "group": "Content Management",
+        "pages": [
+          "content/projects",
+          "content/achievements",
+          "content/experience",
+          "content/blog-posts",
+          "content/site-config"
+        ]
+      },
+      {
+        "group": "Customization",
+        "pages": [
+          "customization/styling",
+          "customization/theme",
+          "customization/layouts"
+        ]
+      },
+      {
+        "group": "Components",
+        "pages": [
+          "components/overview",
+          "components/cards",
+          "components/ui-elements",
+          "components/navigation",
+          "components/sections"
+        ]
+      },
+      {
+        "group": "Deployment",
+        "pages": [
+          "deployment/github-pages",
+          "deployment/custom-domain",
+          "deployment/build-configuration"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "reference/project-structure",
+          "reference/types",
+          "reference/utilities"
+        ]
+      }
+    ]
   }
 }
