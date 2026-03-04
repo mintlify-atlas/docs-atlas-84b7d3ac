@@ -1,0 +1,90 @@
+{
+  "projectType": "frontend",
+  "projectName": "Aviv Keller Portfolio",
+  "projectDescription": "A personal portfolio website showcasing open-source projects, security research achievements, and professional experience.",
+  "theme": "palm",
+  "primaryColor": "#a1a1a2",
+  "lightColor": "#1e1e1e",
+  "darkColor": "#e2e2e2",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "introduction",
+          "quickstart",
+          "installation"
+        ]
+      },
+      {
+        "group": "Content Management",
+        "pages": [
+          "content/projects",
+          "content/achievements",
+          "content/experience",
+          "content/blog-posts",
+          "content/site-config"
+        ]
+      },
+      {
+        "group": "Customization",
+        "pages": [
+          "customization/styling",
+          "customization/theme",
+          "customization/layouts"
+        ]
+      },
+      {
+        "group": "Components",
+        "pages": [
+          "components/overview",
+          "components/cards",
+          "components/ui-elements",
+          "components/navigation",
+          "components/sections"
+        ]
+      },
+      {
+        "group": "Deployment",
+        "pages": [
+          "deployment/github-pages",
+          "deployment/custom-domain",
+          "deployment/build-configuration"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "reference/project-structure",
+          "reference/types",
+          "reference/utilities"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Component-based Astro architecture with reusable UI elements",
+    "TailwindCSS styling with custom design system",
+    "Dynamic project and achievement showcases",
+    "Integrated blog functionality with markdown support",
+    "Responsive design optimized for all devices",
+    "SEO-optimized with Astro SEO integration",
+    "GitHub Pages deployment ready",
+    "Social media integration with multiple platforms"
+  ],
+  "publicApiSurface": [
+    "Project interface for portfolio items",
+    "Achievement interface for recognition and awards",
+    "WorkExperience interface for professional history",
+    "SocialLink interface for social media profiles",
+    "BlogPost interface for blog content",
+    "NavigationItem interface for site navigation",
+    "BaseLayout, MainLayout, StaticLayout components",
+    "Card components (ProjectCard, AchievementCard, WorkExperienceCard, BlogCard)",
+    "UI components (Button, Badge, Card, Icon, Section, SectionHeader, StatCard, Timeline)",
+    "Navigation components (Header, Footer)",
+    "Common components (BackLink, ShareButtons, SocialLinks)",
+    "Site configuration in data/index.ts",
+    "Content data files (projects.ts, achievements.ts, experience.ts)"
+  ]
+}
